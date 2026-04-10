@@ -70,30 +70,48 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 
 | 상황 | 경로 |
 |------|------|
-| 단순 버그 | problem-solver → 수정 → verification |
-| 신규 기능 | planning → bkit PDCA → g-stack /review |
-| UI 구현 | ui-ux-pro-max (--design-system) → bkit PDCA Do → visual-proof |
+| 단순 버그 | problem-solver → investigate → 수정 → verification |
+| 반복 버그 | investigate (근본원인) → problem-solver → 수정 → health |
+| 신규 기능 | planning → bkit PDCA → review → ship |
+| UI 신규 설계 | office-hours → plan-ceo-review → design-consultation → design-shotgun → ui-ux-pro-max → design-html → design-review → visual-proof |
+| UI 기존 개선 | design-review → ui-ux-pro-max → design-html → visual-proof |
+| 컴포넌트 구현 | ui-ux-pro-max (--design-system) → bkit PDCA Do → design-review → visual-proof |
 | 기술 결정 | unbounded → research → verification |
-| 코드 리뷰 | verification → g-stack /review + /cso |
-| 최적화 | research → ralph-loop → verification |
-| 장애 대응 | problem-solver → 긴급 수정 → retrospective |
-| 리팩토링 | unbounded → planning → bkit → g-stack → retro |
-| 스프린트 시작 | planning → 스프린트 계약 → bkit PDCA |
-| 스프린트 종료 | g-stack /retro → retrospective → CLAUDE.md 갱신 |
-| 병렬 개발 | planning → 워크트리 분할 → 2+2 교대 → 머지 |
+| 코드 리뷰 | review → cso → health |
+| QA 단독 | browse → qa → full-verify |
+| 보안 점검 | cso → full-verify |
+| 최적화 | research → ralph-strategy → ralph-loop → verification |
+| 장애 대응 | careful/guard ON → problem-solver → 긴급 수정 → retrospective |
+| 리팩토링 | unbounded → planning → bkit → review → health → retro |
+| 기획 전체 리뷰 | autoplan (plan-ceo + plan-design + plan-eng + plan-devex 자동 순차) |
+| 기획 검토 (선택) | office-hours → plan-ceo-review or plan-design-review or plan-eng-review or plan-devex-review |
+| 스프린트 시작 | sprint-start → planning → 스프린트 계약 → bkit PDCA |
+| 스프린트 종료 | retro → retrospective-engine → CLAUDE.md 갱신 |
+| 배포 준비 | full-verify → review → cso → ship |
+| 배포 실행 | land-and-deploy → canary |
+| 배포 후 | document-release → health |
+| 세션 중단/재개 | checkpoint (저장) → checkpoint resume (복구) |
+| 파괴적 작업 전 | careful 또는 guard (파괴적 명령 감시) |
+| 병렬 개발 | planning → 워크트리 분할 → 2+2 교대 → review → 머지 |
 | 콘텐츠 횡전개 | research → planning → 원소스 → 채널 변환 |
+| 아이디어 검증 | office-hours → plan-ceo-review → research → verification |
+| DX/API 설계 | plan-devex-review → plan-eng-review → verification |
 
 ## Phase 1: 사고 (Think First)
 
 ```
-"방향이 맞나?"        → unbounded-engine
-"뭘 만들지 정리"      → planning-generator
-"UI 체계 결정"        → planning-generator + ui-ux-pro-max (--design-system)
-"왜 안 되지?"         → problem-solver
-"선례/근거 필요"      → research-pipeline
-"반복 최적화"         → ralph-loop
-"맞는지 확인"         → verification-pipeline
-"뭘 배웠나?"          → retrospective-engine
+"방향이 맞나?"         → unbounded-engine
+"뭘 만들지 정리"       → planning-generator
+"UI 체계 결정"         → planning-generator + ui-ux-pro-max (--design-system)
+"왜 안 되지?"          → problem-solver
+"선례/근거 필요"       → research-pipeline
+"반복 최적화 전략"     → ralph-strategy → ralph-loop
+"맞는지 확인"          → verification-pipeline
+"뭘 배웠나?"           → retrospective-engine
+"아이디어 검증"        → office-hours (YC 스타일 6개 강제 질문)
+"기획 전략 검토"       → plan-ceo-review (전략) + plan-design-review (설계)
+"엔지니어링 검토"      → plan-eng-review (아키텍처) + plan-devex-review (DX)
+"전체 기획 자동검토"   → autoplan (4개 리뷰 순차 자동 실행)
 ```
 
 규칙:
@@ -103,14 +121,23 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 ## Phase 2: 코딩 (Build)
 
 ```
-"UI 디자인 결정/컴포넌트 구현" → /ui-ux-pro-max --design-system → bkit PDCA Do
+"UI 디자인 결정/컴포넌트 구현" → ui-ux-pro-max --design-system → bkit PDCA Do
 "새 코드 작성"                 → bkit PDCA Do
 "설계-구현 괴리"               → bkit gap-detector
-"코드 리뷰"                    → g-stack /review
-"보안 점검"                    → g-stack /cso
-"브라우저 QA"                  → g-stack /qa
-"핵심 로직 이중검증"           → g-stack /codex
-"PR/배포"                      → g-stack /ship
+"코드 리뷰"                    → review (PR 착륙 전) → cso (보안)
+"코드 품질 진단"               → health (0-10 점수)
+"보안 점검"                    → cso (OWASP, STRIDE, secrets 스캔)
+"브라우저 QA"                  → browse → qa
+"전체 배포 전 검증"            → full-verify (빌드+린트+타입+보안+e2e)
+"핵심 로직 이중검증"           → codex (Codex second opinion)
+"PR/배포"                      → ship (VERSION 범프 + PR) 또는 land-and-deploy (머지+CI+배포)
+"배포 후 모니터링"             → canary
+"배포 후 문서"                 → document-release
+"버그 근본원인"                → investigate (체계적 추적 → 가설 → 수정)
+"안전 가드레일"                → careful (파괴적 명령 경고) 또는 guard (careful + freeze)
+"세션 상태 저장"               → checkpoint
+"브라우저 쿠키 인증"           → setup-browser-cookies → browse
+"배포 설정"                    → setup-deploy (Fly/Render/Vercel/Netlify 자동 감지)
 ```
 
 ### 프로젝트 하네스 연동 (기존 시스템 존중)
@@ -136,6 +163,59 @@ harsh-critic의 3단계 분노 트리거를 기억:
 - EXTREME (즉시 BLOCK): 예외 지시 위반, QA 없이 완료 선언, 같은 실수 반복
 - HIGH (FAIL): 사용자에게 떠넘기기, 디자인 미달, 근거 없는 규칙, 범위 누락
 - MEDIUM (WARNING): 불필요 허가 요청, 기존 인프라 무시, 형식적 사과
+
+## Phase 2-D: UI/UX 설계 파이프라인
+
+```
+① 새 UI 설계 시작
+   office-hours (YC 스타일 검증 6문) → plan-ceo-review (전략 적합성)
+   → design-consultation (경쟁사 조사 + 디자인 시스템 제안)
+   → design-shotgun (복수 시안 생성 + 비교)
+   → ui-ux-pro-max (67스타일/161팔레트 기준 최종 선택)
+   → design-html (HTML/CSS 변환)
+   → design-review (라이브 감시: 간격/계층/AI slop)
+   → visual-proof (4신호 자동 검증 + 채점)
+
+② 기존 UI 개선
+   design-review (현황 감사) → ui-ux-pro-max (개선 기준) → design-html → visual-proof
+
+③ 빠른 컴포넌트 추가
+   ui-ux-pro-max (--design-system 모드) → bkit PDCA Do → design-review
+```
+
+## Phase 2-E: QA + 배포 파이프라인
+
+```
+① 배포 전 검증
+   health (코드 품질 0-10) → full-verify (빌드+린트+타입+보안+e2e)
+   → review (PR 코드 리뷰) → cso (보안 감사)
+   → ship (VERSION 범프 + PR 생성) 또는 land-and-deploy (자동 머지+CI+배포)
+
+② 배포 후 확인
+   canary (라이브 모니터링) → document-release (문서 동기화)
+
+③ QA 전용
+   browse (헤드리스 브라우저) → qa (버그 발견+수정) → qa-only (감사 보고서만)
+   → cso (보안 포함 전체 감사)
+
+④ 버그 추적
+   investigate (체계적 근본원인) → problem-solver (해결 계획) → health (재확인)
+```
+
+## Phase 2-F: 스프린트 관리 파이프라인
+
+```
+① 스프린트 시작
+   sprint-start (이전 교훈 확인 + 메타질문 + 계획 계약)
+   → planning (기능 분해) → bkit PDCA
+
+② 세션 중
+   checkpoint (30분마다 저장 권장)
+   careful/guard (프로덕션 변경 전 자동 활성)
+
+③ 스프린트 종료
+   retro (커밋 히스토리 + 기여도) → retrospective-engine (DAKI) → CLAUDE.md 갱신
+```
 
 ## Phase 2-B: 워크트리 병렬 (대규모 작업)
 
@@ -172,9 +252,11 @@ CLAUDE.md에 축적 → 다음 세션 자동 로드
 ```
 
 자동 트리거:
-- 테스트 3회 연속 실패 → retrospective incident
-- 스프린트 종료 → retrospective sprint + g-stack /retro
+- 테스트 3회 연속 실패 → investigate → retrospective incident
+- 스프린트 종료 → retro → retrospective-engine → CLAUDE.md 갱신
 - 같은 에러 2회 → unbounded 재진입
+- 배포 명령 감지 → careful/guard 자동 활성
+- 코드 완료 직후 → health → review → cso (순서대로)
 - CLAUDE.md 50+항목 → retrospective memory (정리)
 
 ## 호환성 규칙
