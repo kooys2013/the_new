@@ -205,8 +205,9 @@ harsh-critic의 3단계 분노 트리거를 기억:
 ## Phase 2-F: 스프린트 관리 파이프라인
 
 ```
-① 스프린트 시작
-   sprint-start (이전 교훈 확인 + 메타질문 + 계획 계약)
+① 스프린트 시작 (harness fit 포함)
+   bash ~/.claude/skills/harness-fit.sh  ← gstack/bkit/pretext 자동 업데이트
+   → sprint-start (이전 교훈 확인 + 메타질문 + 계획 계약)
    → planning (기능 분해) → bkit PDCA
 
 ② 세션 중
@@ -216,6 +217,16 @@ harsh-critic의 3단계 분노 트리거를 기억:
 ③ 스프린트 종료
    retro (커밋 히스토리 + 기여도) → retrospective-engine (DAKI) → CLAUDE.md 갱신
 ```
+
+### harness-fit 업데이트 대상
+
+| 컴포넌트 | 업데이트 방법 |
+|---------|-------------|
+| gstack | git pull + /gstack-upgrade |
+| bkit | claude plugin update bkit |
+| pretext vendor | npm install @chenglou/pretext@latest + esbuild 재빌드 |
+| ralph-loop | claude plugin update ralph-loop |
+| skill-creator | claude plugin update skill-creator |
 
 ## Phase 2-B: 워크트리 병렬 (대규모 작업)
 
