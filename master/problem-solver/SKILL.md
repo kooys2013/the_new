@@ -75,6 +75,21 @@ PRD → FS → IA → UF로 구조화          Problem → Root Cause → Soluti
 | **구체적 액션** | 분석 결과는 반드시 실행 가능한 액션으로 이어진다 |
 | **재발 방지** | 임시 조치(Workaround)와 영구 해결(Fix)을 구분한다 |
 | **문서화** | 해결 과정을 기록하여 다음 번 유사 문제를 빠르게 해결 |
+| **교차 학습** | 다른 프로젝트의 유사 문제 교훈을 먼저 검색한다 (gstack learnings 흡수) |
+
+### 교차 프로젝트 학습 (investigate에서 흡수)
+
+코드 문제 진단 시작 전, gstack의 cross-project learnings를 검색한다:
+```bash
+~/.claude/skills/gstack/bin/gstack-learnings-search --limit 5 --cross-project 2>/dev/null || true
+~/.claude/skills/gstack/bin/gstack-learnings-search --limit 5 2>/dev/null || true
+```
+- 관련 교훈이 있으면 → 가설 수립에 반영 (같은 실수 반복 방지)
+- 없으면 → 기존 Why First 프로세스 진행
+- 해결 완료 후 교훈 기록:
+```bash
+~/.claude/skills/gstack/bin/gstack-learnings-log '{"skill":"problem-solver","type":"operational","key":"SHORT_KEY","insight":"DESCRIPTION","confidence":N,"source":"observed"}'
+```
 | **연결 영향 추적** | v2.0 — 해결책이 기존 FS·IA·UF에 미치는 연쇄 영향 분석 |
 | **분석 제한** | 무한 분석 금지. 5 Whys 2회 반복해도 미특정 시 에스컬레이션 |
 

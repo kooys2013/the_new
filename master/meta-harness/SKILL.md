@@ -66,36 +66,46 @@ Q3. 스프린트 계약 필요? → WALK/RUN 티어: 풀 루프
 Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 ```
 
-### 축약 경로
+### 축약 경로 (meta-eval 2026-04-11 최적화 반영)
 
-| 상황 | 경로 |
-|------|------|
-| 단순 버그 | problem-solver → investigate → 수정 → verification |
-| 반복 버그 | investigate (근본원인) → problem-solver → 수정 → health |
-| 신규 기능 | planning → bkit PDCA → review → ship |
-| UI 신규 설계 | office-hours → plan-ceo-review → design-consultation → design-shotgun → ui-ux-pro-max → design-html → design-review → visual-proof |
-| UI 기존 개선 | design-review → ui-ux-pro-max → design-html → visual-proof |
-| 컴포넌트 구현 | ui-ux-pro-max (--design-system) → bkit PDCA Do → design-review → visual-proof |
-| 기술 결정 | unbounded → research → verification |
-| 코드 리뷰 | review → cso → health |
-| QA 단독 | browse → qa → full-verify |
-| 보안 점검 | cso → full-verify |
-| 최적화 | research → ralph-strategy → ralph-loop → verification |
-| 장애 대응 | careful/guard ON → problem-solver → 긴급 수정 → retrospective |
-| 리팩토링 | unbounded → planning → bkit → review → health → retro |
-| 기획 전체 리뷰 | autoplan (plan-ceo + plan-design + plan-eng + plan-devex 자동 순차) |
-| 기획 검토 (선택) | office-hours → plan-ceo-review or plan-design-review or plan-eng-review or plan-devex-review |
-| 스프린트 시작 | sprint-start → planning → 스프린트 계약 → bkit PDCA |
-| 스프린트 종료 | retro → retrospective-engine → CLAUDE.md 갱신 |
-| 배포 준비 | full-verify → review → cso → ship |
-| 배포 실행 | land-and-deploy → canary |
-| 배포 후 | document-release → health |
-| 세션 중단/재개 | checkpoint (저장) → checkpoint resume (복구) |
-| 파괴적 작업 전 | careful 또는 guard (파괴적 명령 감시) |
-| 병렬 개발 | planning → 워크트리 분할 → 2+2 교대 → review → 머지 |
-| 콘텐츠 횡전개 | research → planning → 원소스 → 채널 변환 |
-| 아이디어 검증 | office-hours → plan-ceo-review → research → verification |
-| DX/API 설계 | plan-devex-review → plan-eng-review → verification |
+> 원칙: 마스터=사고 프레임워크(WHAT), 플러그인=실행 자동화(HOW).
+> 같은 단계에서 둘 다 돌리면 토큰 낭비. 순차(사고→실행)로 연결.
+> 교차검증이 필요하면 /codex 사용 (다른 모델 관점).
+> Codex 3모드: review(diff 리뷰), adversarial-review(설계 도전), rescue(위임).
+
+| 상황 | 경로 | 역할 분담 |
+|------|------|-----------|
+| 코드 버그 | problem-solver → 수정 → qa | 마스터가 진단, 플러그인이 검증 |
+| 코드 버그 (교착) | problem-solver 3회 실패 → /codex:rescue --background | GPT에 위임 (비동기) |
+| 비코드 문제 | problem-solver → 수정 → verification | 마스터 단독 (investigate 불필요) |
+| 신규 기능 | office-hours(검증) → planning(문서) → autoplan(리뷰) → bkit PDCA(실행) → review → ship | Z1 순차: 아이디어→문서→검증→실행 |
+| UI 신규 설계 | office-hours → plan-ceo-review → design-consultation → design-shotgun → ui-ux-pro-max → design-html → design-review → visual-proof | 플러그인 독점 |
+| UI 기존 개선 | design-review → ui-ux-pro-max → design-html → visual-proof | 플러그인 독점 |
+| 컴포넌트 구현 | ui-ux-pro-max (--design-system) → bkit PDCA Do → design-review → visual-proof | 플러그인 독점 |
+| 기술 결정 | unbounded → research → verification | 마스터 체인 |
+| 코드 리뷰 | review → cso → health | 플러그인 독점 |
+| 코드 리뷰 (교차) | review → /codex review(GPT 독립 리뷰) → 양쪽 비교 | Claude+GPT 이중검증 |
+| QA/검증 | verification(게이트 설정) → qa + full-verify(실행) → health(대시보드) | Z3: 마스터=프레임워크, 플러그인=실행 |
+| 보안 점검 | cso → full-verify | 플러그인 독점 |
+| 최적화 | ralph-strategy(전략) → ralph-loop(루프 실행) → verification(판정) | Z6: 마스터=전략, 플러그인=실행 |
+| 장애 대응 | careful/guard ON → problem-solver → 긴급 수정 → retrospective-engine | 마스터 단독 |
+| 리팩토링 | unbounded → planning → bkit PDCA → review → health → retro(데이터) → retrospective-engine(분석) | Z4: 플러그인=데이터, 마스터=분석 |
+| 기획 전체 리뷰 | planning(문서 생성) → autoplan(4개 리뷰 자동 순차) | Z1: 마스터 생산 → 플러그인 검증 |
+| 기획 검토 (선택) | office-hours → plan-ceo/design/eng/devex-review | 플러그인 독점 |
+| 스프린트 시작 | sprint-start → planning → 스프린트 계약 → bkit PDCA | 마스터→플러그인 순차 |
+| 스프린트 종료 | retro(데이터 수집) → retrospective-engine(분석+메모리) → CLAUDE.md 갱신 | Z4 순차 |
+| 배포 준비 | verification(게이트) → full-verify + review + cso(실행) → ship | Z3 순차 |
+| 배포 실행 | land-and-deploy → canary | 플러그인 독점 |
+| 배포 후 | document-release → health | 플러그인 독점 |
+| 세션 중단/재개 | checkpoint (저장) → checkpoint resume (복구) | 플러그인 독점 |
+| 파괴적 작업 전 | careful 또는 guard (파괴적 명령 감시) | 플러그인 독점 |
+| 병렬 개발 | planning → 워크트리 분할 → 2+2 교대 → review → 머지 | 혼합 |
+| 콘텐츠 횡전개 | research → planning → 원소스 → 채널 변환 | 마스터 체인 |
+| 아이디어 검증 | office-hours → plan-ceo-review → research → verification | 플러그인→마스터 순차 |
+| DX/API 설계 | plan-devex-review → plan-eng-review → verification | 플러그인→마스터 순차 |
+| 근본적 재고 | unbounded (독점) — office-hours와 겹치지 않음 | 마스터 독점 |
+| 브라우저 자동화 | /browse (headless Chromium, playwright MCP 대체) | 플러그인 독점 |
+| 스킬 충돌 평가 | /meta-eval (마스터 vs 플러그인 벤치마크) | 마스터 독점 |
 
 ## Phase 1: 사고 (Think First)
 
@@ -127,17 +137,22 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 "코드 리뷰"                    → review (PR 착륙 전) → cso (보안)
 "코드 품질 진단"               → health (0-10 점수)
 "보안 점검"                    → cso (OWASP, STRIDE, secrets 스캔)
-"브라우저 QA"                  → browse → qa
+"브라우저 QA/스크린샷/자동화"  → /browse (headless Chromium, playwright MCP 대체)
 "전체 배포 전 검증"            → full-verify (빌드+린트+타입+보안+e2e)
-"핵심 로직 이중검증"           → codex (Codex second opinion)
+"핵심 로직 이중검증"           → /codex review (diff 기반 독립 리뷰, Pass/Fail)
+"설계 접근 자체 도전"          → /codex adversarial-review (접근법이 맞는지 챌린지)
+"디버깅/구현 교착"             → /codex:rescue (Codex에 작업 통째 위임, --background 가능)
 "PR/배포"                      → ship (VERSION 범프 + PR) 또는 land-and-deploy (머지+CI+배포)
 "배포 후 모니터링"             → canary
 "배포 후 문서"                 → document-release
 "버그 근본원인"                → investigate (체계적 추적 → 가설 → 수정)
 "안전 가드레일"                → careful (파괴적 명령 경고) 또는 guard (careful + freeze)
 "세션 상태 저장"               → checkpoint
-"브라우저 쿠키 인증"           → setup-browser-cookies → browse
 "배포 설정"                    → setup-deploy (Fly/Render/Vercel/Netlify 자동 감지)
+
+> **브라우저 자동화**: playwright MCP는 전역에서 제거됨.
+> 브라우저가 필요한 모든 작업(QA, 스크린샷, 폼 테스트, 사이트 검증)은 `/browse` 사용.
+> `/browse`는 gstack 내장 headless Chromium으로 playwright MCP와 동일 기능 제공.
 ```
 
 ### 프로젝트 하네스 연동 (기존 시스템 존중)
