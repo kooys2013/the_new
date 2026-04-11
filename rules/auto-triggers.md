@@ -29,3 +29,25 @@ paths:
 - 같은 교훈 3회 축적 → rules/ 파일로 승격 제안
 - rules/ 위반 반복 → hooks 강제화 제안
 - 승격 후 CLAUDE.md에서 해당 항목 제거 (중복 방지)
+
+## Self-Evolving System 트리거 (DNA 진화)
+
+### 교훈 → 규칙 자동 승격 파이프라인
+- WHEN: accumulated-lessons.md에 같은 ALWAYS/NEVER 3회+ 축적
+  THEN: rules/ 승격 후보 제안 (retrospective-engine Phase 4.5 졸업 판정과 연동)
+- WHEN: rules/ 규칙 위반 2회+ 반복
+  THEN: hooks/ 강제화 후보 제안
+- WHEN: hooks/ 훅이 6개월간 위반 0회
+  THEN: 내면화 완료 → archive 제안
+
+### DNA 진화 트리거 (세션 종료 시)
+- WHEN: harsh-critic EXTREME 위반 발생한 세션
+  THEN: retrospective-engine 필수 실행 + SCP 분류 + 규칙 mutation 제안
+- WHEN: SCP-N 태그가 3세션 연속 동일 유형
+  THEN: 해당 SCP 방어 로직 강화 제안 + unbounded-engine 재진입 검토
+- WHEN: trend-harvester가 스택 변경 감지
+  THEN: 영향받는 rules/ 파일 업데이트 제안
+
+### 신뢰도 감쇠 (Confidence Decay)
+- WHEN: accumulated-lessons.md 항목이 90일간 참조/강화 없음
+  THEN: [STALE] 태그 부여 + 월간 정리 시 아카이브 후보

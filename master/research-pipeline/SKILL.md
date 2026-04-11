@@ -317,6 +317,62 @@ PRISMA 플로우:
 
 ---
 
+## Phase 8: 트렌드 스캔 모드 (Trend Harvester)
+
+> 내부 학습만으로는 기술 생태계 변화에 뒤처진다.
+> 외부 신호를 주기적으로 주입하여 DNA가 현실과 동기화되도록 한다.
+
+### 트리거
+- 세션 시작 시 "하네스 최신화", "셋업", "트렌드 스캔"
+- auto-triggers.md의 주간 트리거
+- unbounded-engine 셋업 모드 Step 1에서 자동 호출
+
+### 스캔 소스 (프로젝트 스택별)
+
+| 도메인 | 소스 | 우선순위 |
+|--------|------|---------|
+| Claude Code | code.claude.com/docs/en + Anthropic 블로그 | A |
+| Next.js/React | Context7 MCP + GitHub Releases | A |
+| Supabase | Context7 MCP + supabase.com/blog | A |
+| Python 생태계 | PyPI 트렌드 + GitHub trending | B |
+| 보안 | GitHub Advisory DB + OWASP 업데이트 | A |
+| 트레이딩 | Binance API changelog | B |
+
+### 실행 흐름
+
+```
+1. 소스별 최신 변경사항 수집 (WebSearch + WebFetch)
+2. 현재 스택/rules/와의 관련성 필터링
+3. 영향도 분류:
+   🔴 Breaking: 즉시 대응 필요 (API 삭제, 보안 취약점)
+   🟡 Update: 적용하면 이득 (성능 개선, 새 기능)
+   🟢 Watch: 추적만 (실험적 기능, 커뮤니티 논의)
+4. 🔴/🟡 항목 → 규칙 mutation 후보 생성
+5. 사용자 확인 → rules/ 업데이트
+```
+
+### 산출물: 트렌드 브리프
+
+```markdown
+## 트렌드 브리프 — {날짜}
+
+### 🔴 즉시 대응
+- [소스] {변경 내용} → 영향: {어떤 rules/파일} → 제안: {mutation}
+
+### 🟡 적용 권장
+- [소스] {변경 내용} → 이점: {설명} → 제안: {mutation}
+
+### 🟢 추적
+- [소스] {변경 내용} → 메모
+```
+
+### harsh-critic 연동
+트렌드에서 발견된 규칙 mutation은 적용 전:
+- service-completion-checklist 통과 (이 변경이 작업 완료를 돕는가?)
+- 기존 rules/ 규칙과 충돌 없는지 확인
+
+---
+
 ## 크롤링 소스 레퍼런스
 
 이 스킬은 사용자의 다음 크롤링 인프라와 연동 가능:
