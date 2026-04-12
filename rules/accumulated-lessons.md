@@ -16,6 +16,7 @@ paths:
 - LangChain JsonOutputParser 반환값에 .get() 금지 (Pydantic 인스턴스) [SCP-1] [since:26/03/10] [reinforced:26/04/05]
 - 전역 vector_store 싱글턴 재도입 금지 [SCP-3] [since:26/03/18]
 - [GO] rules/hooks 생성 후 settings.json 참조 미확인 [SCP-1] [since:26/04/06]
+- [GO][BT] OOS 파티션에서 multiplier 순차 추가·튜닝 금지 → OOS Leakage (진짜 OOS 아님) [SCP-5] [since:26/04/12]
 
 ## WHEN...THEN
 - WHEN 같은 에러 2회 THEN unbounded 재검토 [since:26/03/15] [reinforced:26/04/08]
@@ -24,6 +25,8 @@ paths:
 - WHEN 프론트엔드 변경 완료 THEN /visual-proof 실행 [since:26/03/28]
 - WHEN CLAUDE.md 50줄 초과 THEN rules/ 승격 검토 [since:26/04/01]
 - WHEN 하네스 변경 THEN 훅·rules·스킬 정합 감사 [since:26/04/05] [reinforced:26/04/11]
+- WHEN [GO][BT] multiplier calibration THEN 사전 train/valid/test 3분할 후 train에서만 튜닝 [since:26/04/12]
+- WHEN [GO][BT] bucket N < 50 THEN bootstrap 95% CI 병기, PF 단독 수치 결론 금지 [since:26/04/12]
 
 ## 메타데이터 규칙
 - [SCP-N]: 해당 교훈이 방어하는 실패 유형
