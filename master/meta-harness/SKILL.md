@@ -107,6 +107,9 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 | 브라우저 자동화 | /browse (headless Chromium, playwright MCP 대체) | 플러그인 독점 | — |
 | 스킬 충돌 평가 | /meta-eval (마스터 vs 플러그인 벤치마크) | 마스터 독점 | — |
 | 하네스 최신화/셋업 | research-pipeline Phase 8 (trend-harvester) → tactical rules 업데이트 | 마스터 | trend-harvester → DNA mutation |
+| Codex 잔여량 확인 | http://localhost:8080 (Codex Proxy 대시보드) | 플러그인 독점 | model-strategy §6 연동 |
+| Codex 쿼터 여유 시 | /codex:review (모든 PR) → /codex:adversarial-review (설계 결정) | 적극 활용 | codex-usage-tracker.sh 자동 안내 |
+| Codex 교착 탈출 | /codex:rescue --background (비동기 GPT 위임) | GPT 위임 | model-strategy 에스컬레이션 |
 
 ## Phase 1: 사고 (Think First)
 
