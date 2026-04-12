@@ -123,11 +123,20 @@ process.stdin.on('end', () => {
       const srl = qj.quota?.secondary_rate_limit; // 7d window
 
       if (rl) {
-        // 잔여 % = 100 - used_percent
-        const rem = Math.round(100 - (rl.used_percent || 0));
-        const t   = timeLeft(rl.reset_at);
-        const arrow = rem > 80 ? '↑' : rem > 40 ? '→' : '↓';
-        codexStr = 'Codex:' + rem + '%' + arrow + (t ? '(' + t + ')' : '');
+        // 5h 잔여
+        const rem5 = Math.round(100 - (rl.used_percent || 0));
+        const t5   = timeLeft(rl.reset_at);
+        const arrow5 = rem5 > 80 ? '↑' : rem5 > 40 ? '→' : '↓';
+        let part5 = rem5 + '%' + arrow5 + (t5 ? '(' + t5 + ')' : '');
+        // 7d 잔여
+        let part7 = '';
+        if (srl) {
+          const rem7 = Math.round(100 - (srl.used_percent || 0));
+          const t7   = timeLeft(srl.reset_at);
+          const arrow7 = rem7 > 80 ? '↑' : rem7 > 40 ? '→' : '↓';
+          part7 = rem7 + '%' + arrow7 + (t7 ? '(' + t7 + ')' : '');
+        }
+        codexStr = 'Codex:' + part5 + (part7 ? '/' + part7 : '');
       } else {
         codexStr = 'Codex:On';
       }
