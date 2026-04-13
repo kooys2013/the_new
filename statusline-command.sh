@@ -116,7 +116,7 @@ process.stdin.on('end', () => {
     }
 
     if (!proxyOn) {
-      codexStr = 'Codex:Off';
+      codexStr = '';
     } else if (quotaRaw.startsWith('{')) {
       const qj = JSON.parse(quotaRaw);
       const rl  = qj.quota?.rate_limit;          // 5h window
@@ -146,11 +146,8 @@ process.stdin.on('end', () => {
   } catch(e) { codexStr = 'Codex:?'; }
 
   // 포맷: 모델 | xN에이전트 | 세션:X%(Xh) | 주간:X%(Xd) | Codex:$잔액(만료) 입력+출력
-  process.stdout.write(
-    model + ' | x' + concurrent + ' | ' +
-    sessionStr + ' | ' +
-    weekStr + ' | ' +
-    codexStr
-  );
+  const parts = [model, 'x' + concurrent, sessionStr, weekStr];
+  if (codexStr) parts.push(codexStr);
+  process.stdout.write(parts.join(' | '));
 });
 "
