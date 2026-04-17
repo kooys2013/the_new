@@ -63,6 +63,9 @@ Stop/완료 선언 전 아래 5개 질문에 모두 "예":
 
 **핵심**: 증거 ≠ 신뢰. 모든 단계 건너뛰기 = harsh-critic E1(거짓완료) / E5(범위축소) 위반.
 
+> **재진입 루프 (지속 검증 패턴)**: Verify(4단계) 실패 시 Identify(1단계)로 복귀 — 최대 3회. 3회 초과 시 problem-solver Phase 2-A (체계적 디버깅)로 에스컬레이션. 단순 재시도 반복 금지.
+> <!-- origin: Yeachan-Heo/oh-my-claudecode@ralph | merged: 26/04/17 -->
+
 <!-- origin: obra/superpowers@verification-before-completion | merged: 26/04/17 -->
 
 ## 회고 분류 태그

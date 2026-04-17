@@ -15,9 +15,7 @@
 - meta-eval-log.md — 스킬 평가 이력
 
 ## Memory DNA (MemPalace 프로토콜)
-- mempalace-protocol.md
-- mempalace-retro-sync.md
-- mempalace-growth-log.md
+- mempalace-workflow.md — 통합 파일 (protocol + retro-sync + growth-log)
 
 ## Session DNA (세션 임시 — git 추적 안 함)
 - session-dna/ 폴더 또는 임시 파일 (회고 후 tactical로 승격)

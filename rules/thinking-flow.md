@@ -40,4 +40,5 @@ paths:
 "왜 안 되지"       → problem-solver
 "배포 전 검증"     → unbounded "한방에 검증"
 "이번 주 회고"     → retrospective-engine → g-stack /retro
+<!-- removed: dory-knowledge MCP ref (not installed, pending integration) | 26/04/17 -->
 ```

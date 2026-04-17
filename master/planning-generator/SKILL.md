@@ -1,3 +1,4 @@
+<!-- last-updated: 26/04/17 -->
 ---
 name: planning-generator
 description: |

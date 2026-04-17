@@ -1,3 +1,4 @@
+<!-- last-updated: 26/04/17 -->
 ---
 name: retrospective-engine
 description: |
@@ -189,6 +190,43 @@ PRD → FS → IA → UF           분석 → 원인 → 해결 → 검증   수
 - {accumulated-lessons → rules/}: {규칙, 3회+ 축적 근거}
 - {rules/ → hooks/}: {규칙, 위반 2회+ 근거}
 ```
+
+---
+
+## Phase 1.7: 자동 스킬 후보 제안 (Skill Candidate Extraction)
+
+회고에서 누적된 교훈이 일정 조건을 충족하면 **신규 스킬 후보**를 제안한다.
+단, **제안만 수행하며 스킬 생성은 사용자 명시 승인 후**에만 이루어진다.
+
+### 트리거 조건 (AND)
+
+1. 동일 주제의 교훈이 `rules/accumulated-lessons.md`에 **3회 이상** 축적
+2. 동일 SCP 태그를 공유 (예: `[SCP-5]` 3건 모두 일치)
+3. 기존 스킬 중 해당 주제를 커버하는 것이 없음 (description grep)
+
+### 제안 템플릿
+
+```
+## 스킬 후보 제안 — {날짜}
+
+이름: {kebab-case-name}
+근거 교훈 (3건):
+  - [SCP-N] {교훈 1} [since:YY/MM/DD]
+  - [SCP-N] {교훈 2} [since:YY/MM/DD]
+  - [SCP-N] {교훈 3} [since:YY/MM/DD]
+목적: {1문장}
+승인 시 생성 경로: skills/{name}/SKILL.md
+
+❓ 생성하시겠습니까? (사용자 승인 필요 — 자동 생성 금지)
+```
+
+### 금지 사항
+
+- **자동 생성 금지**: 후보 표시만. 사용자가 "생성해" 라고 명시해야 실제 파일 작성
+- **중복 생성 금지**: 기존 스킬 description과 60% 이상 겹치면 "기존 X 스킬 확장" 으로 대체 제안
+- 삭제/병합 제안은 별도 회고 사이클에서 (`meta-eval-log.md` 참조)
+
+<!-- origin: Yeachan-Heo/oh-my-claudecode@learner | merged: 26/04/17 -->
 
 ---
 

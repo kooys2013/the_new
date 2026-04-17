@@ -1,3 +1,4 @@
+<!-- reviewed: 26/04/17, still enforced -->
 ---
 paths:
   - "**/*"

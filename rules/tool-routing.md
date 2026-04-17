@@ -54,6 +54,15 @@ paths:
 
 <!-- origin: obra/superpowers@using-git-worktrees+dispatching-parallel-agents | merged: 26/04/17 -->
 
+### 보완 에이전트 아키타입 (누락분 매핑)
+기존 Agent tool + bkit 플러그인 에이전트 외에 아래 2종은 개념 태그로 기록:
+| 아키타입 | 역할 | 기존 매핑 |
+|----------|------|----------|
+| Critic | 주장·설계에 반증 시도 | harsh-critic 규칙 + `/codex:adversarial-review` |
+| Tracer | 실행 경로/로그 추적으로 근본원인 추출 | gap-detector + problem-solver Phase 2-A |
+
+<!-- origin: Yeachan-Heo/oh-my-claudecode@agent-archetypes | merged: 26/04/17 -->
+
 ## dory-knowledge 라우팅 (GO 프로젝트 전용)
 - WHEN: 전략/원리/차트분석 판단 분기점 THEN: search_dory 또는 search_principle
 - NEVER: 도리님 원문을 의역하여 인용 — 항상 원문 그대로

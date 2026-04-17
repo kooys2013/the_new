@@ -338,7 +338,9 @@ PRISMA 플로우:
 | 보안 | GitHub Advisory DB + OWASP 업데이트 | A |
 | 트레이딩 | Binance API changelog | B |
 | Agent 방법론 | github.com/obra/superpowers (skill 업데이트 감지, 통합은 DNA 흡수 방식) | B |
+| Agent 방법론 | github.com/Yeachan-Heo/oh-my-claudecode (CCG 다중제공자·skill 자동학습 성숙도 감시) | B |
 <!-- origin: obra/superpowers@trend-source-registration | merged: 26/04/17 -->
+<!-- origin: Yeachan-Heo/oh-my-claudecode@trend-source-registration | merged: 26/04/17 -->
 
 ### 실행 흐름
 

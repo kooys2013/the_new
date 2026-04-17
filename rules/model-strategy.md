@@ -1,3 +1,4 @@
+<!-- last-updated: 26/04/17 -->
 ---
 paths:
   - "**/*"
@@ -20,6 +21,9 @@ paths:
 | QA 자동화 / 브라우저 | sonnet | 실행 중심 |
 | 배포 / git / PR 워크플로 | sonnet | 절차적 |
 | 상태 토글 / 단순 체크 | haiku | 로직 없는 I/O |
+
+> 참고 휴리스틱: `Haiku=분류/라벨링, Sonnet=구현 기본, Opus=아키텍처/3회 실패 에스컬레이션` — 토큰 30~50% 절약 보고.
+> <!-- origin: Yeachan-Heo/oh-my-claudecode@smart-routing | merged: 26/04/17 -->
 
 ## 2. 사용량 기반 작업 권장 안내
 
@@ -103,32 +107,41 @@ WHEN: [작업 유형] THEN: model=[opus/sonnet/haiku]
   근거: [언제, 어떤 시도에서, 왜 이 결론]
 ```
 
-## 6. Codex 사용량 기반 적극 활용 권장
+## 6. Codex 적극 활용 가이드 (공식 플러그인)
 
-> Codex 할당량은 쓰지 않으면 낭비. 남은 시간 대비 사용량이 적으면 적극 사용.
-> 추적: `~/.claude/codex-usage.log` (SessionStart 시 codex-usage-tracker.sh 출력)
+> Codex 쿼터는 ChatGPT 구독에 포함 — 쓰지 않으면 낭비.
+> 상태 확인: `/codex:setup` | 설정: `.codex/config.toml`
+
+### 모드별 활용 우선순위
+
+여유 시 아래 순서로 적극 활용:
+1. `/codex:review` — 모든 PR 전 GPT 독립 리뷰 (가장 가치 높음)
+2. `/codex:adversarial-review` — 아키텍처/설계 결정 시 도전적 검증
+3. `/codex:rescue` — 교착 시 작업 위임 (선별 사용)
+
+### 작업 흐름 내 Codex 삽입 지점
+
+| 하네스 단계 | Codex 활용 | 시점 |
+|------------|-----------|------|
+| 코드 구현 완료 | `/codex:review` | bkit Do 완료 후, /review 전 |
+| problem-solver 교착 | `/codex:rescue investigate ...` | 2회 실패 후 |
+| 브랜치 머지 전 | `/codex:review --base main` | /ship 전 |
+| 보안 /cso 후 | `/codex:adversarial-review` 보안 집중 | RLS/인증 변경 시 |
+| 스프린트 종료 | `/codex:review --base main` | 전체 diff 리뷰 |
+
+### 사용 빈도 권장
 
 | 일간 사용 | 강도 | 권장 행동 |
 |----------|------|----------|
-| 0~1회 | LOW | **적극 활용** — PR 전 /codex:review 필수, 기술 결정 시 /codex:adversarial-review 추천 |
-| 2~4회 | MEDIUM | 적정 — 현재 페이스 유지 |
-| 5~9회 | HIGH | 활발 — 효율적 사용 유지, rescue 위주 |
-| 10회+ | MAX | 핵심만 — rescue/adversarial만 |
+| 0회 | LOW | **적극 활용** — `/codex:review` 먼저 돌려보세요 |
+| 1~4회 | MEDIUM | 적정 — 현재 페이스 유지 |
+| 5~9회 | HIGH | 활발 — rescue 위주로 선별 사용 |
+| 10회+ | MAX | 핵심만 (rescue/adversarial) |
 
-### 시간대별 권장
-
-| 조건 | 행동 |
-|------|------|
-| 하루 절반 이상 남음 + 오늘 미사용 | "리뷰 한번 돌려보세요" 안내 |
-| 저녁(20시+) + 오늘 미사용 | "오늘 Codex 미사용! rescue나 review 추천" 안내 |
-| 주간 5회 미만 + 목요일 이후 | "이번 주 Codex 여유 — 교차 검증 적극 활용" 안내 |
-
-### Codex 모드별 사용 우선순위
-
-사용량 여유 시 다음 순서로 적극 활용:
-1. `/codex:review` — 모든 PR 전 GPT 독립 리뷰 (가장 가치 높음)
-2. `/codex:adversarial-review` — 아키텍처/설계 결정 시 도전적 검증
-3. `/codex:rescue` — 교착 시만 (비용 높음, 선별 사용)
+### Codex 결과 처리 규칙
+- `/codex:rescue` 결과는 Claude가 diff 확인 + typecheck 후 적용
+- Codex와 Claude 의견 상반 시 → 양측 근거 제시 (User Sovereignty)
+- 리뷰 게이트(`--enable-review-gate`)는 유인 세션에서만, 30분 제한
 
 ## 7. 통합 흐름
 
