@@ -99,7 +99,11 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 | 배포 후 | document-release → health | 플러그인 독점 | — |
 | 세션 중단/재개 | checkpoint (저장) → checkpoint resume (복구) | 플러그인 독점 | — |
 | 파괴적 작업 전 | careful 또는 guard (파괴적 명령 감시) | 플러그인 독점 | harsh-critic E3 예외지시 위반 |
-| 병렬 개발 | planning → 워크트리 분할 → 2+2 교대 → review → 머지 | 혼합 | — |
+| 병렬 개발 | planning → 워크트리 분할 → 2+2 교대 → review → 머지 (세션 내 하위작업 조율) | 혼합 | — |
+| Fresh Subagent 위임 | Agent tool 신규 호출(컨텍스트 완전격리) → spec 리뷰 → quality 리뷰 → 수정 재검토 루프 | 마스터 | SCP-3 복잡도회피 방어 |
+| 워크트리 물리 격리 | Agent tool `isolation:"worktree"` → 브랜치별 독립 커밋 → merge | 마스터 | tool-routing.md 파일소유권 매트릭스 |
+| 동시 에이전트 팬아웃 | 단일 메시지 내 Agent tool 다중 호출 → 독립 병렬 수집 | 마스터 | 출력 집계 시 SCP-5 Verify |
+<!-- origin: obra/superpowers@subagent-driven-development+dispatching-parallel-agents+using-git-worktrees | merged: 26/04/17 -->
 | 콘텐츠 횡전개 | research → planning → 원소스 → 채널 변환 | 마스터 체인 | — |
 | 아이디어 검증 | office-hours → plan-ceo-review → research → verification | 플러그인→마스터 순차 | — |
 | DX/API 설계 | plan-devex-review → plan-eng-review → verification | 플러그인→마스터 순차 | — |
@@ -110,6 +114,11 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 | Codex 잔여량 확인 | http://localhost:8080 대시보드 조회 (Codex Proxy — 사용량 모니터링 전용) | 모니터링 전용 | codex-usage-tracker.sh 자동 안내 |
 | Codex 쿼터 여유 시 | /codex:review (PR 전) → /codex:adversarial-review (설계 결정) | 공식 플러그인 사용 | model-strategy §6 연동 |
 | Codex 교착 탈출 | /codex:rescue --background (비동기 GPT 위임) | 공식 플러그인 사용 | model-strategy 에스컬레이션 |
+| 도리님 원리 참조 | search_dory / search_principle (dory-knowledge MCP) | 도리님 KB 독점 | — |
+| 전략 진입/청산 설계 | problem-solver → dory-knowledge 교차 → 구현 | 마스터+KB 순차 | harsh-critic E4 교훈재발 |
+| 백테스트 파라미터 | ralph-strategy → dory-knowledge 참조 → ralph-loop | 마스터+KB 순차 | — |
+| N-gram 패턴 해석 | research-pipeline → dory-knowledge 맥락 → verification | 마스터+KB 순차 | — |
+| Pine Script 수정 | dory-knowledge 원리확인 → 구현 → /codex:review | KB→코딩→검증 | lookahead-audit.sh |
 
 ## Phase 1: 사고 (Think First)
 
@@ -126,6 +135,8 @@ Q4. 병렬 가능? → 워크트리 / 옴니채널 / 순차
 "기획 전략 검토"       → plan-ceo-review (전략) + plan-design-review (설계)
 "엔지니어링 검토"      → plan-eng-review (아키텍처) + plan-devex-review (DX)
 "전체 기획 자동검토"   → autoplan (4개 리뷰 순차 자동 실행)
+"도리님 원리 확인"     → dory-knowledge MCP (search_dory / search_principle)
+"도리님한테 물어봐"    → 도리님 자문 모드
 ```
 
 규칙:

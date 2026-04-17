@@ -331,12 +331,14 @@ PRISMA 플로우:
 
 | 도메인 | 소스 | 우선순위 |
 |--------|------|---------|
-| Claude Code | code.claude.com/docs/en + Anthropic 블로그 | A |
+| Claude Code | https://code.claude.com/docs/ko/changelog (한국어 릴리스노트) + Anthropic 블로그 | A |
 | Next.js/React | Context7 MCP + GitHub Releases | A |
 | Supabase | Context7 MCP + supabase.com/blog | A |
 | Python 생태계 | PyPI 트렌드 + GitHub trending | B |
 | 보안 | GitHub Advisory DB + OWASP 업데이트 | A |
 | 트레이딩 | Binance API changelog | B |
+| Agent 방법론 | github.com/obra/superpowers (skill 업데이트 감지, 통합은 DNA 흡수 방식) | B |
+<!-- origin: obra/superpowers@trend-source-registration | merged: 26/04/17 -->
 
 ### 실행 흐름
 
