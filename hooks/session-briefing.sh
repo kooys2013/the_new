@@ -55,3 +55,15 @@ if [ "$LESSONS" -gt 30 ]; then
 fi
 
 echo "└────────────────────────────────────────────┘"
+
+# 5.5 Vibe mentor (설치 시 자동)
+[ -x "$CLAUDE_DIR/hooks/vibe-mentor-brief.sh" ] && "$CLAUDE_DIR/hooks/vibe-mentor-brief.sh" 2>/dev/null || true
+
+# 6. 병목 진단 5초 루틴 (v2.6)
+echo "┌─── 병목 5초 루틴 (속도 안 날 때) ─────────┐"
+echo "│ 1. 같은 에러 반복? → problem-solver Phase 2-A"
+echo "│ 2. 파일 구조 모름? → /compact + Explore"
+echo "│ 3. 방향 자체 모호? → unbounded-engine"
+echo "│ 4. 도구 선택 불명? → rules/skill-quickref.md"
+echo "│ 5. 모델 한계?     → model-strategy 에스컬레이션"
+echo "└────────────────────────────────────────────┘"

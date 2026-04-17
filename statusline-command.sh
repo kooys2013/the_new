@@ -145,8 +145,23 @@ process.stdin.on('end', () => {
     }
   } catch(e) { codexStr = 'Codex:?'; }
 
-  // 포맷: 모델 | xN에이전트 | 세션:X%(Xh) | 주간:X%(Xd) | Codex:$잔액(만료) 입력+출력
+  // 6. Context % (transcript 크기 근사 — 200k 토큰 윈도우 가정, 1 token ≈ 4 chars)
+  let ctxStr = '';
+  try {
+    const tp = d.transcript_path;
+    if (tp) {
+      const fs = require('fs');
+      const sz = fs.statSync(tp).size; // bytes ≈ chars
+      const approxTokens = sz / 4;
+      const pct = Math.min(99, Math.round((approxTokens / 200000) * 100));
+      const warn = pct >= 60 ? ' ⚠/compact' : '';
+      ctxStr = 'Ctx:' + pct + '%' + warn;
+    }
+  } catch(e) {}
+
+  // 포맷: 모델 | xN에이전트 | 세션:X%(Xh) | 주간:X%(Xd) | Ctx:X% | Codex:...
   const parts = [model, 'x' + concurrent, sessionStr, weekStr];
+  if (ctxStr) parts.push(ctxStr);
   if (codexStr) parts.push(codexStr);
   process.stdout.write(parts.join(' | '));
 });

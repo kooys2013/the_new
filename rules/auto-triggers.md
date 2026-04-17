@@ -30,6 +30,9 @@ paths:
 - rules/ 위반 반복 → hooks 강제화 제안
 - 승격 후 CLAUDE.md에서 해당 항목 제거 (중복 방지)
 
+## 플랜 모드 × planning-generator 연결 (v2.6)
+- WHEN: ExitPlanMode 호출 직후 THEN: 메인 스레드가 plan 파일 구조 점검 → PRD/FS/IA/UF 4섹션 없으면 planning-generator 프레임으로 재구조화 제안 (Phase 1-D 마이크로태스크 포함)
+
 ## 병목 감지 + 즉시 대응 트리거 (v2.6)
 
 > "속도가 안 나올 때" → 수정 전 반드시 병목 유형 진단 먼저
