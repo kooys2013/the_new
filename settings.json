@@ -1,0 +1,239 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_USAGE_GATE_ENABLED": "true",
+    "CLAUDE_OPUS_LIMIT_5H": "80",
+    "CLAUDE_FALLBACK_MODEL_5H": "sonnet",
+    "CLAUDE_OPUS_LIMIT_7D": "80",
+    "CLAUDE_FALLBACK_MODEL_7D": "sonnet",
+    "CLAUDE_USAGE_CACHE_TTL": "60"
+  },
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "model": "opusplan",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"C:/Users/koo-ys/workspaces/INSIGHT/.claude/hooks/start-servers.sh\"",
+            "statusMessage": "INSIGHT 서버 상태 확인 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-briefing.sh",
+            "statusMessage": "세션 브리핑 준비 중..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/codex-usage-tracker.sh",
+            "statusMessage": "Codex 사용량 확인 중..."
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/slack-notify.sh requesting-permission"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/harsh-critic-stop.sh",
+            "statusMessage": "Harsh Critic 완료 체크 중..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/slack-notify.sh completed"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.mempalace/hooks/mistake_detector_hook.sh",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.mempalace/hooks/mempal_precompact_hook.sh",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/global-careful.sh",
+            "statusMessage": "파괴적 명령 검사 중..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/gate-guard.sh",
+            "statusMessage": "GateGuard 체크..."
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/gate-guard.sh",
+            "statusMessage": "GateGuard 체크..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/typecheck.sh",
+            "statusMessage": "TypeScript 타입체크 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/security-scan.sh",
+            "statusMessage": "보안 스캔 중...",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/security-scan.sh",
+            "statusMessage": "보안 스캔 중...",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "bkit@bkit-marketplace": true,
+    "ralph-loop@claude-plugins-official": true,
+    "usage-gate@usage-gate": true,
+    "codex@openai-codex": true,
+    "vibe-sunsang@fivetaku": true
+  },
+  "extraKnownMarketplaces": {
+    "careerhackeralex": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/careerhackeralex/visualize.git"
+      }
+    },
+    "claude-community": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-community"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "bkit-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "popup-studio-ai/bkit-claude-code"
+      }
+    },
+    "usage-gate": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/jung-wan-kim/usage-gate.git"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "fivetaku": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/fivetaku/gptaku_plugins.git"
+      }
+    }
+  },
+  "autoUpdatesChannel": "latest",
+  "channelsEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "enableRemoteControl": true,
+  "channels": [
+    "plugin:telegram@claude-plugins-official"
+  ],
+  "mcpServers": {
+    "mempalace": {
+      "command": "C:\\Users\\koo-ys\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "args": [
+        "-m",
+        "mempalace.mcp_server",
+        "--palace",
+        "C:\\Users\\koo-ys\\.mempalace"
+      ],
+      "type": "stdio"
+    },
+    "bkit-pdca": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\koo-ys\\.claude\\plugins\\cache\\bkit-marketplace\\bkit\\2.0.8\\servers\\bkit-pdca-server\\index.js"
+      ],
+      "type": "stdio"
+    },
+    "bkit-analysis": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\koo-ys\\.claude\\plugins\\cache\\bkit-marketplace\\bkit\\2.0.8\\servers\\bkit-analysis-server\\index.js"
+      ],
+      "type": "stdio"
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "type": "stdio"
+    }
+  },
+  "skipAutoPermissionPrompt": true
+}
