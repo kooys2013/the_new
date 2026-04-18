@@ -67,3 +67,26 @@ paths:
 ```
 
 참조: `rules/auto-triggers.md` 병목 섹션, `rules/thinking-flow.md`, `rules/model-strategy.md`
+
+---
+
+## 다중 에이전트 패턴 (빠른 선택)
+
+| 패턴 | 트리거 | 파일 |
+|------|--------|------|
+| Orchestrator/Swarm/Pipeline/Review/Fan-out | 복잡 작업 조율, 병렬 서브에이전트 | `rules/multi-agent-patterns.md` |
+| Advisor (Sonnet + Opus 단일 턴) | 구현+판단 동시, sonnet 2회 실패 후 3.5차 | `rules/advisor-strategy.md` |
+
+---
+
+## 한방 진입점 (autopus `/auto dev` 패턴 차용)
+
+> **자동 우선**: `~/.claude/hooks/oneshot-trigger.sh` (UserPromptSubmit)가 자연어 키워드 자동 감지.
+> 수동 슬래시는 fallback. 사용자는 평소처럼 자연어로 말하면 됨.
+
+| 진입점 | 자동 트리거 키워드 | 용도 |
+|--------|------------------|------|
+| `/oneshot dev`    | "한방에 개발", "처음부터 끝까지 만들어", "전부 알아서 해" | 사고→구현→검증→회고 6레이어 자율 |
+| `/oneshot verify` | "한방에 검증", "배포 전 완전 검증", "출시 전 검증" | 6축 동시 검증 + 자동 수정 |
+| `/oneshot advise` | "조언해줘", "갈림길", "판단이 안 서", "사각지대" | 5인 자문위원회 (비실행) |
+| `/oneshot setup`  | "하네스 핏", "harness fit", "CLAUDE.md 생성" | 하네스 핏 (4 Step) |

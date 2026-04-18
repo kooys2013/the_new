@@ -11,7 +11,7 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
-  "model": "opusplan",
+  "model": "sonnet",
   "hooks": {
     "SessionStart": [
       {
@@ -31,6 +31,12 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/codex-usage-tracker.sh",
             "statusMessage": "Codex 사용량 확인 중..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stale-drawer-detector.sh",
+            "statusMessage": "Stale drawer 검사 중...",
+            "async": true
           }
         ]
       }
@@ -45,6 +51,16 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/oneshot-trigger.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -52,6 +68,12 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/harsh-critic-stop.sh",
             "statusMessage": "Harsh Critic 완료 체크 중..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stop-codex-bg.sh",
+            "statusMessage": "Codex 리뷰 대기 마커 생성 중...",
+            "async": true
           },
           {
             "type": "command",
@@ -94,6 +116,11 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/gate-guard.sh",
             "statusMessage": "GateGuard 체크..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/edit-integrity-guard.sh",
+            "statusMessage": "Edit 무결성 검사 중..."
           }
         ]
       },
@@ -104,6 +131,11 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/gate-guard.sh",
             "statusMessage": "GateGuard 체크..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/edit-integrity-guard.sh",
+            "statusMessage": "Edit 무결성 검사 중..."
           }
         ]
       }
@@ -123,6 +155,11 @@
             "command": "bash ~/.claude/hooks/security-scan.sh",
             "statusMessage": "보안 스캔 중...",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/lore-commit-suggest.sh",
+            "async": true
           }
         ]
       },
@@ -133,6 +170,21 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/security-scan.sh",
             "statusMessage": "보안 스캔 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/lore-commit-suggest.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/read-hash-recorder.sh",
             "async": true
           }
         ]
@@ -197,6 +249,7 @@
   "autoUpdatesChannel": "latest",
   "channelsEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true,
   "enableRemoteControl": true,
   "channels": [
     "plugin:telegram@claude-plugins-official"
@@ -234,6 +287,5 @@
       ],
       "type": "stdio"
     }
-  },
-  "skipAutoPermissionPrompt": true
+  }
 }

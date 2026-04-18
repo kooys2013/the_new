@@ -59,3 +59,7 @@ paths:
 - EXTREME/HIGH → 즉시 ALWAYS/NEVER 규칙 도출
 - MEDIUM 3회+ 반복 → rules/ 승격 후보
 - 위반 유형별 빈도 → 복리 지수 산출에 반영
+
+---
+
+> **리뷰 통과 기준 = 5축(검·읽·일·안·추)** — `code-review-5axis.md` 참조. E1·E2 위반 = 검 축 FAIL, E4 = 안 축 FAIL, M3 = 추 축 FAIL.

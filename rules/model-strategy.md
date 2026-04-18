@@ -25,6 +25,9 @@ paths:
 > 참고 휴리스틱: `Haiku=분류/라벨링, Sonnet=구현 기본, Opus=아키텍처/3회 실패 에스컬레이션` — 토큰 30~50% 절약 보고.
 > <!-- origin: Yeachan-Heo/oh-my-claudecode@smart-routing | merged: 26/04/17 -->
 
+> **Opus 4.7 강점 (2026/04 업데이트)**: 확장된 추론 깊이(아키텍처·보안·연구 합성 특화), 도구 호출 정확도 개선, 장문 컨텍스트(200k) 전체 활용 능력 향상.
+> <!-- origin: claude.com/blog/opus-4-7 | merged: 26/04/17 -->
+
 ## 2. 사용량 기반 작업 권장 안내
 
 > 강제 아님 — 사용량 구간에 따라 작업 페이스 권장만 한다.
@@ -89,6 +92,27 @@ paths:
 | 4차 | **codex 교차** | 성공 → 교훈: "Claude 편향 — codex가 맞음" |
 | 4차 | codex도 실패 | — | unbounded-engine 재진입 (문제 재정의) |
 
+## 4.5 Advisor 패턴 (Sonnet + Opus 단일 턴)
+
+> "opus 전면 전환이 과한데 판단 지점만 Opus가 필요" → **3.5차 시도**로 Advisor 우선.
+> 상세 스펙: `rules/advisor-strategy.md`
+> <!-- origin: claude.com/blog/the-advisor-strategy | merged: 26/04/17 -->
+
+에스컬레이션 사다리 내 위치:
+```
+1차 sonnet 실패 → 2차 sonnet 재시도 실패
+  → [3.5차] Advisor (sonnet executor + opus advisor, max_uses=3)
+    → [3차] opus 전면 전환 → [4차] /codex → unbounded-engine
+```
+
+| 사용 | 판단 기준 |
+|------|----------|
+| ✅ 구현 + 아키텍처/보안 판단 동시 | Sonnet 실행, Opus가 판단만 |
+| ✅ 대규모 리팩토링 | Sonnet 실행, Opus가 의존성 영향 추론 |
+| ❌ 순수 코딩 / 순수 전략 / 반복 루프 | 단독 모델로 충분 |
+
+사용량 가드: GREEN/YELLOW → Advisor OK | ORANGE → 자제 | RED → 금지
+
 ## 5. 교훈 기반 모델 승격/강등
 
 ### 승격 (sonnet → opus)
@@ -115,33 +139,60 @@ WHEN: [작업 유형] THEN: model=[opus/sonnet/haiku]
 ### 모드별 활용 우선순위
 
 여유 시 아래 순서로 적극 활용:
-1. `/codex:review` — 모든 PR 전 GPT 독립 리뷰 (가장 가치 높음)
-2. `/codex:adversarial-review` — 아키텍처/설계 결정 시 도전적 검증
+1. `/codex:review` — 모든 PR 전 GPT 독립 리뷰 (가장 가치 높음) — **Stop hook이 자동 대기 마커 생성**
+2. `/codex:adversarial-review` — 아키텍처/설계 결정 시 도전적 검증 (민감 파일 변경 시 자동 권고)
 3. `/codex:rescue` — 교착 시 작업 위임 (선별 사용)
+
+### model + effort 선택 전략 (쿼터 최적화)
+
+| 상황 | 모델 | effort | 플래그 예시 |
+|------|------|--------|------------|
+| 루틴 리뷰 (Stop hook 자동) | `spark` | `low` | `--model spark --effort low --background` |
+| PR 전 브랜치 전체 리뷰 | 기본(gpt-5.4) | `medium` | `--base main` |
+| 아키텍처/보안 심층 검증 | 기본(gpt-5.4) | `high` | `--scope branch` |
+| 교착 rescue (교착 해제 목적) | 기본 | `xhigh` | `--effort xhigh` |
+| 이전 rescue 스레드 재개 | 기본 | `medium` | `--resume` |
+
+> `spark` = `gpt-5.3-codex-spark` 별칭. 쿼터 소비 최소 → 루틴 리뷰에 적합.
+> Plus 기준 5시간 창에서 GPT-5.4 약 40분 / spark 약 120분 사용 가능.
 
 ### 작업 흐름 내 Codex 삽입 지점
 
-| 하네스 단계 | Codex 활용 | 시점 |
-|------------|-----------|------|
-| 코드 구현 완료 | `/codex:review` | bkit Do 완료 후, /review 전 |
-| problem-solver 교착 | `/codex:rescue investigate ...` | 2회 실패 후 |
-| 브랜치 머지 전 | `/codex:review --base main` | /ship 전 |
-| 보안 /cso 후 | `/codex:adversarial-review` 보안 집중 | RLS/인증 변경 시 |
-| 스프린트 종료 | `/codex:review --base main` | 전체 diff 리뷰 |
+| 하네스 단계 | Codex 활용 | 자동화 수준 |
+|------------|-----------|------------|
+| 세션 종료 (코드 변경 시) | Stop hook → 마커 생성 → 다음 briefing 노출 | **자동** |
+| 코드 구현 완료 | `/codex:review --model spark --effort low` | 반자동 (briefing 권고) |
+| problem-solver 2회 실패 | `/codex:rescue --resume` (→ 없으면 fresh) | 반자동 (트리거 권고) |
+| 민감 파일 변경 (auth/rls/sql) | `/codex:adversarial-review --scope working-tree` | 반자동 (briefing 권고) |
+| 브랜치 머지 전 | `/codex:review --base main` | 수동 (/ship 직전) |
+| 보안 /cso 후 | `/codex:adversarial-review --scope branch` | 수동 (RLS/인증 변경 시) |
+| 스프린트 종료 | `/codex:review --base main` | 수동 (전체 diff) |
 
 ### 사용 빈도 권장
 
 | 일간 사용 | 강도 | 권장 행동 |
 |----------|------|----------|
-| 0회 | LOW | **적극 활용** — `/codex:review` 먼저 돌려보세요 |
+| 0회 | LOW | **적극 활용** — briefing의 Codex 대기 항목 확인 |
 | 1~4회 | MEDIUM | 적정 — 현재 페이스 유지 |
 | 5~9회 | HIGH | 활발 — rescue 위주로 선별 사용 |
-| 10회+ | MAX | 핵심만 (rescue/adversarial) |
+| 10회+ | MAX | 핵심만 (rescue/adversarial), spark 모델 우선 |
 
 ### Codex 결과 처리 규칙
 - `/codex:rescue` 결과는 Claude가 diff 확인 + typecheck 후 적용
 - Codex와 Claude 의견 상반 시 → 양측 근거 제시 (User Sovereignty)
 - 리뷰 게이트(`--enable-review-gate`)는 유인 세션에서만, 30분 제한
+- `/codex:status --all` — 세션 간 백그라운드 잡 확인 (다음 세션에서 결과 회수 가능)
+
+## 6.5 Opus vs Codex 선택 기준
+
+| 상황 | 선택 | 이유 |
+|------|------|------|
+| 내부 교차 검증 (같은 히스토리) | **Opus advisor** | 컨텍스트 공유, 단일 턴 효율 |
+| 외부 시각 (독립 리뷰, 팀 편향 제거) | **Codex** | Claude 히스토리와 독립 |
+| 보안 취약점 재감사 | Codex (`/codex:adversarial-review`) | 외부 시각이 더 신뢰 |
+| sonnet 2회 실패 → 판단 지점만 필요 | **Advisor** (3.5차) | Opus 전면 전환 전 저비용 시도 |
+
+<!-- origin: claude.com/blog (Apr 2026) | merged: 26/04/17 -->
 
 ## 7. 통합 흐름
 
