@@ -19,6 +19,11 @@ fi
 PENDING="$HOME/.claude/_cache/weekly-fit-pending.md"
 if [ -f "$PENDING" ]; then
   echo "│ ⚡ 주간 FIT 제안 대기 — bash ~/.claude/hooks/apply-weekly-fit.sh <A|B|C>"
+  # Anthropic 블로그 신규 글 체크
+  BLOG_COUNT=$(grep -c "https://claude.com/blog" "$PENDING" 2>/dev/null || echo 0)
+  if [ "$BLOG_COUNT" -gt 0 ]; then
+    echo "│ 📡 Anthropic 블로그 신규 ${BLOG_COUNT}건 (최근 7일) — unbounded-engine Phase 2 참조 권장"
+  fi
 fi
 
 echo "└────────────────────────────────────────────┘"

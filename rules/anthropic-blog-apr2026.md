@@ -3,7 +3,7 @@
 ---
 description: Anthropic 블로그 2026년 4월 핵심 5개 글 요약 — 단일 출처 참조용
 paths:
-  - "**/*"
+  - "__on_demand_only__"
 ---
 
 # Anthropic Blog — 2026년 4월 핵심 요약

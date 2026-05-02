@@ -1,7 +1,7 @@
 <!-- last-updated: 26/04/17 -->
 ---
 paths:
-  - "**/*"
+  - "__on_demand_only__"
 ---
 # 모델 전략 규칙 (v2.6)
 
@@ -21,6 +21,10 @@ paths:
 | QA 자동화 / 브라우저 | sonnet | 실행 중심 |
 | 배포 / git / PR 워크플로 | sonnet | 절차적 |
 | 상태 토글 / 단순 체크 | haiku | 로직 없는 I/O |
+| **traceability-weaver** (Phase 1-3) | sonnet | Grep + 매트릭스 갱신 |
+| **ux-rehearsal** (채점) | sonnet | roleplay 채점 (haiku 불가) |
+| **drift-sentinel** (심각도 판정) | sonnet→haiku 위임 | 분기 로직 단순 |
+| **observability-bus** (집계) | haiku | 파일 IO + 카운트만 |
 
 > 참고 휴리스틱: `Haiku=분류/라벨링, Sonnet=구현 기본, Opus=아키텍처/3회 실패 에스컬레이션` — 토큰 30~50% 절약 보고.
 > <!-- origin: Yeachan-Heo/oh-my-claudecode@smart-routing | merged: 26/04/17 -->

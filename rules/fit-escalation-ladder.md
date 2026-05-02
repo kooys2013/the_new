@@ -2,7 +2,8 @@
 ---
 description: vibe-sunsang 관찰 기반 DNA 강제화 단계 사다리
 paths:
-  - "**/*"
+  - "hooks/**"
+  - ".claude/**"
 ---
 
 # FIT Escalation Ladder
@@ -34,6 +35,7 @@ archive      — 내면화 완료, 제거
 | FAIL | problem-solver 권고 | PreToolUse(Edit) 2회 실패 차단 | Stop 훅 3회실패 에스컬레이션 강제 |
 | CTX | statusline ⚠ /compact | 60% 초과 시 Bash 차단 | UserPromptSubmit 파일지정 역질문 |
 | META | SessionStart 브리핑 1줄 | 회고 미실행 시 세션 종료 차단 | 주간 retrospective 강제 |
+| **DRIFT** | `drift-sentinel.sh` statusMessage (info→warn) | warn 8주+ → PostToolUse(Edit/Write) merge 차단 | critical → PreToolUse block (breaking change 승인 강제) |
 
 ## 자동 승격 판정
 

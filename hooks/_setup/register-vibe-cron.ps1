@@ -32,4 +32,17 @@ $monthlyAct = New-ScheduledTaskAction -Execute $BashExe -Argument "-c `"if [ `$(
 Register-ScheduledTask -TaskName "vibe-sunsang-monthly" -Trigger $monthlyTrigger -Action $monthlyAct -Force | Out-Null
 Write-Host "✓ Registered: vibe-sunsang-monthly (매월 1일 03:00)"
 
-Write-Host "`n완료. 확인: schtasks /Query /TN vibe-sunsang-daily"
+# 4. Daily Fit Deep — 매일 22:45 Layer 2 심층 분석 (일요일은 스크립트 내부에서 skip — weekly 22:00 충돌 방지)
+# 설계 근거: plans/velvet-yawning-pixel.md §설계 Layer 2
+# WakeToRun $false — PC가 대기 중이면 대기, 사용자 작업 중에만 실행
+# 참고: RunLevel Highest는 admin 필요 → 기본 user level 사용 (bash 실행에 충분)
+$dailyFitTrigger = New-ScheduledTaskTrigger -Daily -At "22:45"
+$dailyFitAct = New-ScheduledTaskAction -Execute $BashExe -Argument "`"$HooksDir\2604181801_daily-fit-analyzer.sh`""
+$dailyFitSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -WakeToRun:$false -StartWhenAvailable
+Register-ScheduledTask -TaskName "claude-daily-fit-deep" -Trigger $dailyFitTrigger -Action $dailyFitAct -Settings $dailyFitSettings -Force | Out-Null
+Write-Host "✓ Registered: claude-daily-fit-deep (매일 22:45 — 일요일 내부 skip)"
+
+Write-Host "`n완료. 확인:"
+Write-Host "  schtasks /Query /TN vibe-sunsang-daily"
+Write-Host "  schtasks /Query /TN claude-daily-fit-deep"
+Write-Host "  Get-ScheduledTask claude-daily-fit-deep"

@@ -1,5 +1,6 @@
 ---
 name: ralph-strategy
+model: sonnet
 description: |
   (MASTER) 반복 최적화 전략 수립. 목표/metric/target 정의 + progress.json 상태 모델 + 정체 대응.
   실제 반복 실행은 공식 ralph-loop 플러그인(Stop 훅 기반)이 담당한다.
@@ -13,6 +14,7 @@ description: |
   정체 3회 → unbounded-engine 재진입
   정체 5회 → 사용자에게 목표/metric 재정의 요청
 model: sonnet
+effort: high
 ---
 
 # 랄프 루프 (Ralph Loop) — 자율 반복 실행 스킬

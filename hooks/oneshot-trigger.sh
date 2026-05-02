@@ -52,7 +52,7 @@ fi
 
 # additionalContext 출력 (Claude 프롬프트에 추가됨)
 cat <<EOF
-[oneshot-trigger] 한방 모드 키워드 감지 → 자동 라우팅 권고: \`/oneshot $SUGGEST "<원래 요청>"\`
+[oneshot-trigger] 한방 모드 키워드 감지 → 자동 라우팅 권고: /oneshot $SUGGEST (프롬프트에 입력)
 - 사용자는 hooks 기반 자동 발동을 선호함 (수동 슬래시 입력 회피)
 - 현재 요청을 unbounded-engine "$SUGGEST 모드"로 즉시 진입 처리
 - 진입 메시지: "한방 모드 진입 — Phase A부터 시작합니다 (사고→구현→검증→회고). 중단하려면 Esc."

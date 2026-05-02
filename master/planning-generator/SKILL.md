@@ -1,6 +1,8 @@
-<!-- last-updated: 26/04/17 -->
 ---
 name: planning-generator
+model: claude-sonnet-4-6
+effort: high
+last-updated: 26/04/17
 description: |
   (MASTER) 기획서·PRD·FS·IA 문서 생성기 — 반드시 사용: 기획서, PRD, 기능명세서, FS, 요구사항정의서, 정보구조도, IA, 유저플로우, 스펙, 로드맵, 기획해줘, 문서로 만들어줘. Always use when creating planning documents. Do NOT use for code, debugging, or retrospectives.
 

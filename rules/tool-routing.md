@@ -1,6 +1,6 @@
 ---
 paths:
-  - "**/*"
+  - "__on_demand_only__"
 ---
 # 도구 라우팅 규칙
 
@@ -62,6 +62,21 @@ paths:
 | Tracer | 실행 경로/로그 추적으로 근본원인 추출 | gap-detector + problem-solver Phase 2-A |
 
 <!-- origin: Yeachan-Heo/oh-my-claudecode@agent-archetypes | merged: 26/04/17 -->
+
+## Seeing like an Agent — 도구 출력 설계 원칙
+<!-- origin: claude.com/blog (Apr 2026 "Seeing like an agent") | merged: 26/04/17 -->
+
+> 도구 출력은 **에이전트가 관찰해서 즉시 의사결정**할 수 있도록 설계.
+> Hook, statusline, 멘토 브리핑, QA 리포트 모두 이 원칙 적용.
+
+| 원칙 | 잘못된 예 | 올바른 예 |
+|------|----------|----------|
+| 상태 가시성 | `done` | `✅ 빌드 성공 (12s)` or `❌ 빌드 실패` |
+| 다음 액션 힌트 | (없음) | `→ 다음: /compact 후 재개 권장` |
+| 에러 구체성 | `오류 발생` | `ENOENT: /tmp/x 없음 → 경로 확인 필요` |
+
+- ALWAYS: 새 hook/skill 출력 작성 시 위 3원칙 체크
+- NEVER: "실패" 단독 출력 — 원인 + 복구 힌트 포함
 
 ## dory-knowledge 라우팅 (GO 프로젝트 전용)
 - WHEN: 전략/원리/차트분석 판단 분기점 THEN: search_dory 또는 search_principle

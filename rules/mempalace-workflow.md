@@ -1,7 +1,7 @@
 ---
 description: MemPalace 통합 워크플로 — 실수 방지 프로토콜 + 회고 동기화 + 성장 일지 규칙
 paths:
-  - "**/*"
+  - "__on_demand_only__"
 ---
 
 # MemPalace 통합 워크플로
@@ -144,3 +144,74 @@ mempalace_search "retro" --wing {프로젝트wing} --room retro-
 
 - 이전 성장 일지와 비교하여 성장 추세 한 줄 코멘트
 - "유성에게 확인받고 싶은 것" 섹션 반드시 포함
+
+---
+
+## Knowledge Drawer 포맷 (v1.0, 26/04/18 — GBrain Compiled Truth 이식)
+
+### 목적
+원리·아키텍처·의사결정 같은 **정제된 지식**을 drawer에 구조화 저장한다.
+대화 로그(기존 wing_mistakes / wing_mgtg 등)와 명확히 분리한다.
+
+### Wing 구조
+- wing: `wing_knowledge` (전용, 신설)
+- hall: `hall_facts` (원리·결정) / `hall_discoveries` (새 발견) / `hall_advice` (권장사항)
+- room: `{도메인}-{주제}` 예: `mgtg-p-theory`, `koreno-psm-12elements`, `harness-scp-protocol`
+
+### Drawer 포맷 (필수 준수)
+
+```markdown
+---
+type: principle | architecture | decision | pattern
+title: {한 줄 제목}
+tags: {쉼표 구분}
+supersedes: {기존 drawer ID, 대체하는 경우}
+references: {관련 drawer ID 쉼표 구분}
+last_compiled: {YY/MM/DD}
+---
+
+## 현재 이해 (Compiled Truth)
+{지금 시점의 **확정된 결론**. 추측·가설 금지.}
+{새 증거 나오면 이 섹션 전체를 **재작성**한다. append 금지.}
+
+---
+
+## 증거 타임라인 (Append-Only)
+- YY/MM/DD: {근거 + 출처}
+- YY/MM/DD: {반례 or 업데이트 + 출처}
+```
+
+### 쓰기 규칙
+
+- ALWAYS: 상단 재작성 시 `last_compiled` 필드 갱신 (YY/MM/DD 포맷)
+- ALWAYS: 하단 타임라인은 **append-only** — 과거 항목 수정·삭제 금지
+- ALWAYS: 상단을 뒤엎는 증거 발견 시 → 신규 drawer 생성 후 `supersedes: {기존 ID}` 지정, 기존 drawer는 유지
+- NEVER: 대화 로그·실수 기록을 wing_knowledge에 쓰지 마라 (wing_mistakes 또는 프로젝트 wing으로)
+- NEVER: Compiled Truth 섹션에 "아마도", "추정됨", "확인 필요" 표현 금지 — 확정만
+- WHEN: 3건 이상의 타임라인 항목이 상단과 모순 THEN: 즉시 재작성 (stale-detector 훅 자동 알림)
+
+### Typed Link 의미론
+
+| 필드 | 의미 | 예시 |
+|---|---|---|
+| `supersedes` | 이 drawer가 기존 drawer를 대체함 | 새 SL 공식이 이전 SL 공식을 대체 |
+| `references` | 이 drawer가 다른 drawer를 근거로 삼음 | P이론이 등배원리를 참조 |
+
+### 검색·호출 패턴
+
+```
+# 기본: wing_knowledge 내 정제 지식 검색
+mempalace_search "P이론 지지" --wing wing_knowledge
+
+# 특정 타입만
+mempalace_search "P이론" --wing wing_knowledge --room mgtg-p-theory
+
+# supersedes 체인 추적 (이 drawer를 대체하는 최신본 찾기)
+# → MCP 도구로 직접 지원되지 않으므로, references 필드 grep으로 수동 확인
+```
+
+### 자동 트리거 연동 (auto-triggers.md 참조)
+- 전략 카드·PSM·횡전개 결정 시작 시 자동 검색
+- last_compiled가 90일+ 미갱신 drawer는 stale-detector가 주간 알림
+
+<!-- origin: garrytan/gbrain@compiled-truth+typed-links | merged: 26/04/18 -->

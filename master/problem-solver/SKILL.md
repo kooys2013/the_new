@@ -19,6 +19,7 @@ description: |
   ※ 이 스킬은 planning-generator의 자식 스킬이다.
   ※ 두 스킬은 쌍둥이: 기획(부모)이 설계하고, 문제해결(자식)이 실행한다.
 model: opus
+effort: high
 ---
 
 # 문제해결기 (problem-solver) v2.0

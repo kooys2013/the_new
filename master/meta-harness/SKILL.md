@@ -24,6 +24,7 @@ description: |
   - "한방에" 류의 트리거가 왔는데 범위가 불확실한 경우
 effort: medium
 user-invocable: true
+model: claude-opus-4-7
 ---
 
 # Meta-Harness 오케스트레이터

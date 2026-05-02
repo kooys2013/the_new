@@ -1,7 +1,7 @@
 ---
 description: meta-eval 평가 이력 — 마스터 vs 플러그인 스킬 벤치마크 결과 및 적용 기록
 paths:
-  - "**/*"
+  - "__on_demand_only__"
 ---
 
 # Meta-Eval 평가 이력

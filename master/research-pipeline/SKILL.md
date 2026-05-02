@@ -1,5 +1,6 @@
 ---
 name: research-pipeline
+model: sonnet
 description: |
   (MASTER) 리서치 파이프라인 — 반드시 사용: 조사해줘, 리서치, 찾아줘, 선행연구, 문헌고찰, 시장 조사, 사례 찾아줘, 논문, 근거 있어, research, find evidence, investigate. For any research or investigation task. Do NOT use for creating documents or verifying claims.
 
@@ -21,6 +22,7 @@ description: |
   ※ 연구 결과의 검증이 필요하면 verification-pipeline과 연동.
   ※ 이 스킬은 4형제 파이프라인의 두 번째: 기획 → [연구] → 문제해결 → 검증.
 model: opus
+effort: high
 ---
 
 # 연구 파이프라인 (research-pipeline)
@@ -331,7 +333,7 @@ PRISMA 플로우:
 
 | 도메인 | 소스 | 우선순위 |
 |--------|------|---------|
-| Claude Code | https://code.claude.com/docs/ko/changelog (한국어 릴리스노트) + Anthropic 블로그 | A |
+| Claude Code | https://code.claude.com/docs/ko/changelog (한국어 릴리스노트) + Anthropic 블로그 (권장 스캔 주기: **주 1회**) | A |
 | Next.js/React | Context7 MCP + GitHub Releases | A |
 | Supabase | Context7 MCP + supabase.com/blog | A |
 | Python 생태계 | PyPI 트렌드 + GitHub trending | B |
@@ -341,6 +343,8 @@ PRISMA 플로우:
 | Agent 방법론 | github.com/Yeachan-Heo/oh-my-claudecode (CCG 다중제공자·skill 자동학습 성숙도 감시) | B |
 <!-- origin: obra/superpowers@trend-source-registration | merged: 26/04/17 -->
 <!-- origin: Yeachan-Heo/oh-my-claudecode@trend-source-registration | merged: 26/04/17 -->
+
+> ⚡ **주간 Anthropic 블로그 스캔** = vibe-sunsang 주간 스케줄에 합류 (`hooks/weekly-fit-analyzer.sh`, 일요일 22:00 자동 실행). 별도 트리거 없음.
 
 ### 실행 흐름
 

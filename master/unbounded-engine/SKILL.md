@@ -38,6 +38,7 @@ description: |
   "CLAUDE.md 생성", "CLAUDE.md 업데이트", "하네스 최적화",
   "도구 업데이트", "bkit 업데이트", "g-stack 업데이트", "gstack 업데이트",
   "최신화", "하네스 점검", "셋업", "setup"
+  슬래시 커맨드 진입점: `/oneshot setup [프로젝트 경로|'current']`
 
   셋업 모드는 3가지를 한 번에 수행한다:
   ① 최신 Claude Code 베스트 프랙티스 참조 → 하네스 구조 최적화
@@ -67,6 +68,7 @@ description: |
   "무한사고로 한방에 개발", "한방에 개발", "풀 파이프라인 개발",
   "처음부터 끝까지 만들어", "전부 알아서 해", "ㄱㄱ 개발",
   "6레이어 개발", "다층 개발", "자율 개발 파이프라인"
+  슬래시 커맨드 진입점: `/oneshot dev "<기능설명>"` (UserPromptSubmit hook이 키워드 자동 감지)
 
   한방에 개발 모드는 6레이어 자율 파이프라인으로 기획→구현→검증→회고를 전부 수행한다.
 
@@ -74,12 +76,14 @@ description: |
   "무한사고로 한방에 검증", "한방에 검증", "풀 검증",
   "전체 검증", "6레이어 검증", "다층 검증",
   "배포 전 완전 검증", "출시 전 검증", "L4 완전 검증"
+  슬래시 커맨드 진입점: `/oneshot verify "<검증대상>"` (UserPromptSubmit hook이 키워드 자동 감지)
 
   한방에 검증 모드는 6축 동시 검증 + 교차 피드백 + 자동 수정을 수행한다.
 
   또한 아래 키워드에서 **무한조언 모드**를 발동한다:
   "무한조언", "어드바이스", "조언해줘", "어떻게 생각해?", "의견 좀",
   "갈림길", "고민", "판단이 안 서", "뭘 놓치고 있지?", "사각지대"
+  슬래시 커맨드 진입점: `/oneshot advise "<고민주제>"` (UserPromptSubmit hook이 키워드 자동 감지)
 
   무한조언 모드는 비실행 모드. 5인 자문위원회가 각자 1~2줄 조언 → 사용자 판단.
 
@@ -135,22 +139,36 @@ unbounded-engine/
 
 ## 페르소나 시스템
 
-### 코어 (항상 작동): 머스크 × 섀넌
+**⚠️ 중요 규칙 (ICLR 2024 "Bias Runs Deep" 반영):**
+- ALWAYS: 페르소나는 **사고 프로토콜**이지 **정체성**이 아니다
+- NEVER: "나는 머스크다"식 1인칭 몰입 금지 (성능 33~70% 저하)
+- ALWAYS: "머스크의 제1원리 분해 프로토콜을 적용하면..."식 메타 서술
+- NEVER: 페르소나 간 1:1 합의 도출 (단일 관점 증폭) → 다중 페르소나 발산 관점으로 전환
 
-섀넌: 신호/잡음 분리 → 본질만 남김
-머스크: 본질을 제1원리로 분해 → 새 솔루션 구축
-= 도리님 제0원리 + 제1원리와 동형 구조
+### 코어 (항상 작동): 본질-제1원리 분해 프로토콜
+
+**기능명**: Essence-First-Principles Protocol
+**별칭**: 섀넌 × 머스크 (사용자 친화 브랜딩)
+
+- 기능 1 (섀넌 프로토콜): 신호/잡음 분리 → 본질 비트만 남김
+- 기능 2 (머스크 프로토콜): 본질을 물리/논리 공리로 분해 → 재구축
+- ⚠️ 실행 시 **기능 실행** 서술만 사용. "머스크라면 이렇게 볼 것이다" 같은 몰입 금지.
+- = 도리님 제0원리 + 제1원리와 동형 구조
 
 ### 상황별 발현
 
-| 발현 조건 | 페르소나 | 핵심 질문 |
-|-----------|---------|-----------|
-| 경쟁/속도 | **보이드** | "상대보다 빠르게 순환하는가?" |
-| 자원 열세 | **이순신** | "이 제약을 무기로 전환하는가?" |
-| 프로세스 최적화 | **오노** | "어디에 낭비가 있는가?" |
-| 최종 감사 | **멍거** | "어떻게 하면 확실히 실패하나?" |
+| 발현 조건 | 프로토콜 (별칭) | 핵심 질문 | 기능 |
+|-----------|-------|-----------|------|
+| 경쟁/속도 | **OODA 프로토콜** (보이드) | "순환 속도 병목은?" | 관찰-방향-결정-행동 사이클 측정 |
+| 자원 열세 | **비대칭 프로토콜** (이순신) | "제약의 장점 전환?" | 제약을 레버리지로 재설계 |
+| 프로세스 최적화 | **카이젠 프로토콜** (오노) | "낭비 위치는?" | 8대 낭비 스캔 + 5 Whys |
+| 최종 감사 | **역전 프로토콜** (멍거) | "실패 경로는?" | Pre-mortem + 편향 체크리스트 |
+
+**중요**: 2개 이상의 프로토콜을 적용할 때는 **합의 도출 금지**, 각 관점을 **독립적으로 나열**.
+최종 판단은 사용자가 한다 (User Sovereignty).
 
 > 상세 Phase 변환표 → `@references/personas.md`
+> 근거: Gupta et al. (ICLR 2024) — Persona-assigned LLM 평균 33% 성능 하락
 
 ---
 
@@ -168,19 +186,104 @@ unbounded-engine/
 
 ## 실행 흐름 — 6 Phase
 
+### Pre-Phase: Cynefin 도메인 분류 (ALWAYS 첫 단계)
+
+무한사고엔진 진입 시 반드시 문제 유형을 4도메인으로 분류하라.
+도메인이 다르면 Phase 적용 방식이 달라진다.
+
+| 도메인 | 판별 질문 | 적용 모드 |
+|--------|----------|----------|
+| **Clear** | "모범 사례가 이미 존재하는가?" | Pre-Phase에서 종료 — 무한사고 불필요. `problem-solver`로 직행 |
+| **Complicated** | "전문가 분석으로 정답을 찾을 수 있는가?" | Phase 0~3 전체 실행 (6 Phase 풀) |
+| **Complex** | "행동 후에만 원인을 알 수 있는가?" | Phase 0+1만 실행 → `ralph-loop`로 안전 실패 실험 |
+| **Chaotic** | "즉각 행동이 분석보다 시급한가?" | Pre-Phase + Phase 1 반전 질문만 → 즉시 `problem-solver` 긴급 프로토콜 |
+
+**오분류 방어 (가장 중요):**
+- "전문가면 풀 수 있다" → Complicated일 것 같지만, 환경이 **행동 자체로 변화**한다면 Complex
+- 예시: 트레이딩 전략 = Complex (시장이 참여자의 행동에 반응) / 설비 고장 = Complicated
+- 예시: KORENO 설비 개선 = 대부분 Complicated / GO 프로젝트 전략 개발 = Complex
+- 예시: 웹서비스 버그 수정 = Clear or Complicated / 프로덕트 방향 결정 = Complex
+
+**Complex 도메인에서의 핵심 규칙:**
+- NEVER: 단일 최적 계획 수립 금지
+- ALWAYS: 저비용 병렬 실험 2~3개 동시 설계
+- WHEN: 결과 관찰 후 THEN: 강화 or 폐기 판정
+
+> 근거: Snowden (2024 재정의) — AI 에이전트 최다 실패 유형이 Complex↔Complicated 오분류
+
+---
+
 ### Phase 0: 제약 스캔
-암묵적 제약 추출 → L1/L2/L3 분류 → L3 제거 후 재정의
+암묵적 제약 추출 → L1/L2/L3 분류 → **Chesterton 체크 통과 시에만** L3 제거 후 재정의
+
+#### Chesterton Fence 3질문 체크 (L3 판정 후 제거 전 필수)
+
+L3으로 분류된 제약을 제거하기 전, 반드시 아래 3질문에 답하라:
+
+1. **역사 질문**: 이 규칙이 언제, 어떤 사건 이후에 생겼는가?
+   - 답 가능 + 사건 확인 → 제거 신중 검토
+   - 답 불가 (추측만 가능) → **제거 보류** (사용자에게 확인 필수)
+
+2. **고통 질문**: 이 규칙이 없었다면 어떤 고통이 발생했겠는가?
+   - 구체적 고통 시나리오 3개 이상 생성 가능 → 보존 후보
+   - 시나리오 생성 불가 → 제거 후보
+
+3. **LLM 환각 체크**: 내가 지금 만드는 설명이 학습 데이터의 그럴듯한 사후 합리화인가?
+   - 확인 방법: 동일 질문을 `problem-solver`에 위임하여 5 Whys 검증
+   - 근거 없는 합리화면 → **제거 금지 + [UNVERIFIED L3] 태그**
+
+**분류 결과:**
+- ✅ L3 확정 (3질문 통과) → 제거 후보
+- ⚠️ L3 보류 ([UNVERIFIED L3]) → 사용자에게 역사적 근거 확인 요청
+- 🔒 L3 → L2 재분류 (실제로는 기술적 이유가 있음)
+
+> 근거: Econlib (2024) "Misusing Chesterton's Fence" — LLM 환각에 의한 사후 합리화 위험
 
 ### Phase 1: 메타-질문 (코어)
 섀넌: 본질적 비트만 남기기 → 머스크: 삭제/상위/반전 3질문
 → 재정의된 문제 출력
 
-### Phase 2: 10x 렌즈
-현재 정량화 → 10배 목표 → 차단 요인(→제약분류) → 전환점 → 역산 첫 액션
+### Phase 2: 10x 렌즈 (ruin risk 경고 포함)
 
-### Phase 3: 교차도메인 충돌
-추상 패턴 추출 → 20개 풀에서 3개 선택 → 역이식 → L1→폐기, L3→후보
-> `@references/domain-patterns.md`
+**순서**: 현재 정량화 → 10배 목표 → 차단 요인(→제약분류) → 전환점 → 역산 첫 액션
+
+**⚠️ ruin risk 체크 (신규 · Taleb 2012 "Antifragile")**:
+
+> 근거: 10x 업사이드에만 집중하면 0.1x 다운사이드(파멸)를 간과하는 moonshot 편향 발생. Taleb ergodicity 문제 — 확률적으로 유망하지만 **한 번의 파멸이 모든 기대값을 0으로 만드는 경로** 존재.
+
+10x 목표 제시 전 반드시 아래 3질문 통과:
+- Q1 **파멸 가능성**: 이 10x 시도가 실패할 때 **0.1x(초기의 10분의 1)도 각오**할 수 있는가?
+- Q2 **복귀 가능성**: 0.1x 상태에서 **원래 수준으로 복귀가 가능**한가? (회복 불가 = ruin)
+- Q3 **비가역성**: 실패가 **평판·건강·재정 중 하나를 영구 손상**시키지 않는가?
+
+**결과**:
+- Q1+Q2+Q3 모두 통과 → 10x 추진 (convex 구조)
+- Q1~Q3 중 1개라도 불합격 → **바벨 전략** 적용: 10x 시도는 전체 자원의 **10% 이하**로 제한, 나머지 90%는 **극보수** 배치
+- ruin 경로 존재 → `[TALEB-RUIN-RISK]` 태그 필수 + Phase 5 Pre-mortem에서 재검토
+
+**ALWAYS**: 트레이딩·헬스·평판 도메인은 기본적으로 비가역성 높음 → 바벨 가중치 우선
+**NEVER**: 10x 업사이드만 제시하고 다운사이드 수치 생략 (moonshot bias)
+
+> 참조: `@references/trading-antifragile.md` — GO 프로젝트 바벨 설계 (90% 보수 + 10% 공격)
+
+### Phase 3: 교차도메인 충돌 (RAG 우선, 유추 보조)
+
+> 근거: Lewis & Mitchell 2024, "Evaluating the Robustness of Analogical Reasoning in LLMs" — LLM 순수 유추는 표면적 유사성에 쉽게 속아 실패 (zero-shot 정답률 급락). 실제 사례 기반 RAG 인출이 우선.
+
+**순서 (RAG-first)**:
+1. **추상 패턴 추출** — 현재 문제의 구조 (제약·목표·제거된 L3) 를 키워드 3~5개로 요약
+2. **RAG 검색 (우선)** — `@references/domain-patterns.md` 에서 **실제 사례**를 키워드 매칭으로 인출. 최소 3건
+3. **유추 (보조)** — RAG 결과 0건일 때만 순수 유추 시도. 이때 결과물에 `[LLM-ANALOGY-UNVERIFIED]` 태그 필수
+4. **역이식** — 인출한 실제 사례의 메커니즘을 현재 도메인에 적용 → L1(불가)→폐기, L3(관습)→후보
+5. **검증** — 역이식 결과가 "표면적 유사"인지 "구조적 유사"인지 3질문으로 확인
+   - Q1 메커니즘: 원본 사례의 성공 메커니즘이 현재 도메인에서도 작동하나?
+   - Q2 제약: 원본 도메인의 L1/L2 제약이 현재 도메인에도 있나?
+   - Q3 규모: 원본이 작동한 규모와 현재 문제의 규모가 비슷한가?
+
+**NEVER**: RAG 없이 "수렵채집과 비슷하게..."식 추상 유추 단독 사용 (LLM 환각 경로)
+**ALWAYS**: 도메인 사례 인출 실패 시 `[LLM-ANALOGY-UNVERIFIED]` 태그 + 사용자 검증 요청
+
+> `@references/domain-patterns.md` — 도메인별 실제 사례 3~5건 이상 (RAG 인덱스)
 
 ### Phase 4: 페르소나 발현 + 7분류 분배
 
@@ -199,10 +302,29 @@ A (발견→기획): unbounded → planning-generator → problem-solver
 B (발견→검증): unbounded → research-pipeline → ralph-loop → verification-pipeline
 C (풀 루프): unbounded → 기획 → 연구 → 실행 → 검증 → 회고 → 재진입
 
-### Phase 5: 합성 + 멍거 감사 + 회고 연동
+### Phase 5: 합성 + 멍거 감사 + Pre-mortem + 회고 연동
+
+**V1~V5 검증 (기존)**:
 V1. L3 복귀 체크 → V2. 10x/10% 체크 → V3. 도메인 편향 체크
 V4. 멍거 역전("확실히 실패하려면?") → V5. 과적합 체크
-미달 시 해당 Phase 회귀.
+
+**Pre-mortem 프로토콜 (신규 · Klein 2025, AI-Augmented Pre-mortem)**:
+
+> 근거: Gary Klein "Seeing What Others Don't" + 2025 재조명. 사전 부검(Pre-mortem)은 "이미 실패했다고 가정하고 원인을 역추적"하는 기법. 낙관 편향을 30% 감소시킨다는 실험 결과.
+
+1. **시점 이동**: "오늘은 2035년이다. 이 계획은 완전히 실패했다"로 선언
+2. **실패 시나리오 생성**: 각 프로토콜(섀넌/머스크/보이드/이순신/오노/멍거) 관점에서 1개씩 → 6개 이상 실패 경로
+3. **인간 컨텍스트 질문 (AI가 모르는 영역)**:
+   - Q1 정치: 이해관계자 중 이 계획으로 손해 보는 사람은? 반발할 수 있나?
+   - Q2 타이밍: 이 계획의 "지금"이 아니면 안 되는 이유는? 3개월 늦어도 되나?
+   - Q3 숨은 가정: 우리가 당연하다고 보는 것 중 실제로 검증 안 된 건?
+   - Q4 외부 충격: 매크로·규제·기술·경쟁 4축 중 가장 취약한 축은?
+   - Q5 내부 붕괴: 팀 이탈·번아웃·리더 부재 시 이 계획은 살아남나?
+4. **역추적 → 선제 방어**: 각 실패 경로에 대해 **지금 할 수 있는 방어 조치** 1개씩 추가
+5. **잔여 리스크 명시**: 방어 불가한 리스크는 명시 (사용자가 판단 위임받음)
+
+**검증 미달 시**: 해당 Phase 회귀. Pre-mortem 실패 경로 3개+ 발견 시 → Phase 4 재설계 필수.
+
 **사이클 완료 시** → `retrospective-engine`으로 Lessons → ALWAYS/NEVER 변환 → 메모리 갱신.
 
 ---
@@ -338,6 +460,11 @@ Step 4: CLAUDE.md 생성/업데이트 → 사용자 확인
    - https://www.anthropic.com/engineering/
    → 목록 WebFetch → Claude Code·에이전트·하네스 관련 글 선별 → 각 글 WebFetch
    → 새 기법·패턴·베스트 프랙티스 → 하네스 개선 제안에 반영
+
+   ⚡ **참조 타이밍 (필수)**: 문제 재정의 Phase 2 진입 시 최근 30일 `claude.com/blog` 글 1개 이상 확인.
+   새 모델/패턴/원칙이 있으면 → "이게 현재 문제 재정의에 영향하는가?" 판단 후 반영.
+   주간 자동 스캔: `hooks/weekly-fit-analyzer.sh` (일요일 22:00 자동 실행).
+   <!-- origin: claude.com/blog + internal fit | merged: 26/04/17 -->
 
    **필독 참조 글 (Anthropic 공식, 하네스 설계 근거):**
    - https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
@@ -914,6 +1041,9 @@ Step 1 사고 브리프 + Step 3 멍거 역전만 실행한다.
 - ALWAYS: 합성에서 "공통 방향"과 "갈등 지점" 분리
 - ALWAYS: 프로젝트 CLAUDE.md 교훈 참조하여 맥락화
 - NEVER: 2줄 초과 / 코드 작성 / 파일 변경 / 실행 제안
+- NEVER: "나는 [위인명]이다"식 1인칭 몰입 (페르소나 편향 증폭, ICLR 2024)
+- ALWAYS: "[프로토콜명] 관점으로는..."식 메타 서술
+- ALWAYS: 최종 판단 권한은 사용자에게 (합성에서 결론 강제 X)
 - 결정 후: "기획해줘"→planning / "한방에 개발"→한방에 / "조사해봐"→research
 
 ### 상황별 위인 선별
@@ -927,11 +1057,13 @@ Step 1 사고 브리프 + Step 3 멍거 역전만 실행한다.
 
 ---
 
-## 한방에 개발 모드 — 6레이어 자율 파이프라인
+## 한방에 개발 모드 v2 — 헤드리스 페이즈 격리 파이프라인
 
-> "사고가 코딩을 감시하고, 코딩이 사고에 피드백하며, 품질이 양쪽을 심판한다."
+> "메인 세션은 의도만 기억하고, 구현은 독립 세션에 위임한다." — v2 핵심
+> "사고가 코딩을 감시하고, 코딩이 사고에 피드백한다." — v1 계승
 
-기획→구현→검증→회고를 6레이어 전체의 내부 피드백 루프로 자율 실행.
+기획→구현→검증→회고 전 과정을 **메인 세션 컨텍스트 격리** 패턴으로 자율 실행.
+v1 대비 메인 컨텍스트 소모를 80%→20% 미만으로 축소.
 
 ### 트리거
 "무한사고로 한방에 개발", "한방에 개발", "ㄱㄱ 개발", "처음부터 끝까지 만들어"
@@ -940,39 +1072,145 @@ Step 1 사고 브리프 + Step 3 멍거 역전만 실행한다.
 - PRD 또는 기능 명세 (없으면 planning-generator로 생성)
 - 프로젝트 CLAUDE.md (없으면 셋업 모드 먼저)
 - bkit + g-stack 설치
+- **`scripts/phase_runner.py` 가 글로벌 스킬 디렉토리에 존재**
+- 작업 디렉토리에서 git 초기화 완료
 
-### 3겹 동심원 루프
-외곽: 매크로 PDCA (Plan→Do→Check→Act)
-  중간: 모듈별 미니 PDCA (구현→자가검증→수정→재검증→다음)
-    내곽: 다층 피드백 (L1사고 ↔ L3코딩 ↔ L4품질 ↔ L2 UX)
+### v2 아키텍처
 
-### Phase A: 사고 준비 (코드 작성 금지)
+```
+[메인 세션]                      [독립 자식 세션 N개]
+  │
+  ├─ Phase A: 사고 (메인에서만)
+  │  └─ 의도 구체화·계획·페이즈 분할
+  │
+  ├─ Phase A.5: progress.json 생성
+  │  └─ phases/01.md ~ phases/NN.md 작성
+  │
+  ├─ Phase B: 헤드리스 실행 (메인은 모니터링만)
+  │  └─ subprocess: python phase_runner.py run
+  │     ├─ 페이즈 1: claude -p ─► 문서 업데이트 + docs.diff 생성
+  │     ├─ 페이즈 2: claude -p ─► docs.diff 자동 주입 + 구현
+  │     ├─ ...                    각 페이즈 종료 시 git commit
+  │     └─ 페이즈 N: claude -p ─► 최종 통합
+  │
+  ├─ Phase C: 통합 검증 (메인이 직접)
+  │  └─ /review + /cso + /qa
+  │
+  ├─ Phase D: 품질 게이트 (harsh-critic)
+  │
+  └─ Phase E: PR 생성 + 회고
+     └─ retrospective-engine
+```
+
+### Phase A: 사고 준비 (메인 세션, 코드 작성 금지)
+
 A1. unbounded Phase 0~1 (제약스캔 + 메타질문)
-A2. planning-generator (탐색→비교→계획서→모듈분할)
+A2. planning-generator (탐색→비교→계획서→**모듈/페이즈 분할**)
 A3. 디자인 결정 (UI 시): ui-ux-pro-max --design-system
 A4. research-pipeline (필요 시): Context7 API 확인
 
-### Phase B: 다층 구현 (모듈별 미니 PDCA)
-각 모듈: bkit Do → 자가검증(tsc + security-scan + sanyuan P0~P3)
-→ P0 수정 → 재검증 (P0=0까지 최대 3회) → git commit → 다음 모듈
-병렬 가능 시: 파일 소유권 분할 → 최대 3 워크트리
+**필수 산출물**: `spec/feature.md` (PRD/FS/IA/UF) — Phase 1 문서 업데이트의 대상
 
-### Phase C: 통합 검증 (중간 루프)
-C1 빌드(build/lint/test) → C2 리뷰(/review+sanyuan+/codex) → C3 보안(/cso)
-→ C4 UX(/design-review+visual-proof) → C5 QA(/qa)
-BLOCK→즉시수정→C1재실행 / FAIL→수정→해당C재실행 / 최대 3회
+### Phase A.5: progress.json + 페이즈 프롬프트 작성 (메인 세션)
+
+각 페이즈는 **자기완결적**이어야 한다 (메인 대화에 의존 금지).
+`references/phase_template.md` 형식으로 작성.
+
+작성 순서:
+1. `mkdir -p .oneshot/phases`
+2. `phases/01_update_docs.md` — **무조건 문서 업데이트 페이즈로 시작**
+   (스펙 변경 → docs.diff 자동 생성 → 후속 페이즈에 주입)
+3. `phases/02_xxx.md` ~ `phases/NN_final.md` — 모듈 단위 분할
+4. `phases.json` 생성:
+   ```json
+   {
+     "spec_files": ["spec/feature.md"],
+     "phases": [
+       { "name": "Update docs", "prompt_file": "01_update_docs.md",
+         "context_files": ["spec/feature.md"] },
+       { "name": "Implement schema", "prompt_file": "02_schema.md",
+         "context_files": ["spec/feature.md", "src/db/index.ts"] }
+     ]
+   }
+   ```
+5. 초기화:
+   ```bash
+   python ~/.claude/skills/unbounded-engine/scripts/phase_runner.py init \
+     --task "feat: <설명>" --phases .oneshot/phases.json
+   ```
+
+**ALWAYS: 페이즈 1은 무조건 문서 업데이트** — 스펙 드리프트 방어의 핵심.
+**NEVER: 페이즈를 30개 초과로 분할** — 컨텍스트 폭발 주의.
+**WHEN: 페이즈가 20개+ THEN: 작업을 2~3개 묶음으로 분할 후 순차 실행.**
+
+### Phase B: 헤드리스 실행 (메인은 모니터링만, 컨텍스트 격리)
+
+```bash
+python ~/.claude/skills/unbounded-engine/scripts/phase_runner.py run
+```
+
+메인 세션의 역할:
+- 진행 상황 모니터링 (status 명령으로 주기적 확인)
+- 페이즈 실패 시 사용자에게 보고 + 재시도 vs 페이즈 분할 결정
+- **절대 코드를 직접 쓰지 않는다** — 헤드리스 자식 세션이 전담
+
+자식 세션의 역할:
+- 자기 페이즈 프롬프트만 보고 작업 (메인 대화 모름)
+- docs.diff 자동 주입됨 → 스펙 일치 강제
+- 자가 검증 (typecheck, test) 통과 후 종료
+- phase_runner.py가 자동 git commit
+
+실패 시 복구:
+- `python phase_runner.py status` — 어디서 막혔는지 확인
+- 동일 페이즈 재시도: `python phase_runner.py run`
+- 페이즈 자체 재설계: `python phase_runner.py reset --phase N` 후 phases/NN.md 수정 → run
+
+### Phase C: 통합 검증 (메인 세션, 컨텍스트 여유 충분)
+
+전 페이즈 완료 후 메인이 직접 실행 (이때 메인 컨텍스트는 20% 미만):
+
+```
+C1. 빌드: npm run build / lint / test
+C2. 코드 리뷰: /review + /codex review
+C3. 보안: /cso
+C4. UX: /design-review + visual-proof (UI 변경 시)
+C5. QA: /qa
+```
+
+BLOCK → 즉시 수정(메인에서) → C1 재실행
+FAIL → 페이즈 분할 후 phase_runner reset → 재실행
+최대 3회
 
 ### Phase D: 품질 게이트
+
 harsh-critic 11항목 → PASS만 Phase E로
+특히 E1(거짓완료), E5(범위누락) 통과 — docs.diff 비교로 자동 검증
 
 ### Phase E: 산출물 + 회고
-/ship 준비 + retrospective → ALWAYS/NEVER → CLAUDE.md
 
-### 자가 검증 (한방에 개발 전용)
+- /ship 또는 PR 생성 (CodeRabbit 등 외부 리뷰 트리거)
+- retrospective-engine → ALWAYS/NEVER → CLAUDE.md 누적 교훈 갱신
+- progress.json 아카이브 (`.oneshot/archive/{task_name}_{date}/`)
+
+### v2 자가 검증
+
 - [ ] Phase A에서 코드 작성 없이 사고만 했는가?
-- [ ] 모든 모듈에서 미니 PDCA(B1~B4)를 완주했는가?
-- [ ] P0 이슈 0건 상태에서만 다음 모듈로 넘어갔는가?
+- [ ] Phase A.5에서 페이즈 1을 **문서 업데이트**로 잡았는가?
+- [ ] 모든 페이즈 프롬프트가 자기완결적인가? (메인 대화 의존 0건)
+- [ ] phase_runner.py가 docs.diff를 자동 주입했는가?
+- [ ] 메인 세션 컨텍스트가 Phase B 종료 후 30% 미만인가?
+- [ ] 각 페이즈마다 git commit이 자동 생성되었는가?
 - [ ] Phase C 통합 검증을 건너뛰지 않았는가?
+- [ ] retrospective-engine 회고가 CLAUDE.md에 반영되었는가?
+
+### v1과 동시 운영
+
+v1("한방에 개발")은 **단순/빠른 작업** (페이즈 5개 이하)에 유지 가능.
+v2("한방에 개발 v2" / "헤드리스 한방에")는 **중대규모** (페이즈 5개+)에 권장.
+
+판별 기준:
+- 페이즈 5개 이하 + 메인 세션 80% 미사용 → v1
+- 페이즈 5개+ OR 메인 세션 60% 이상 사용 예상 → v2 강제
 
 ---
 

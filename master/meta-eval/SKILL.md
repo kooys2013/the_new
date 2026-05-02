@@ -15,6 +15,7 @@ description: |
   "플러그인 vs 마스터", "기능 중복", "라우팅 최적화"
 effort: high
 user-invocable: true
+model: claude-opus-4-7
 ---
 
 # Meta-Eval: 스킬 충돌 평가 + 하네스 재구성 엔진

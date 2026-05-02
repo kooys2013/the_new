@@ -6,12 +6,45 @@
     "CLAUDE_FALLBACK_MODEL_5H": "sonnet",
     "CLAUDE_OPUS_LIMIT_7D": "80",
     "CLAUDE_FALLBACK_MODEL_7D": "sonnet",
-    "CLAUDE_USAGE_CACHE_TTL": "60"
+    "CLAUDE_USAGE_CACHE_TTL": "60",
+    "CLAUDE_OBS_DIR": "",
+    "CLAUDE_DRIFT_DIR": "",
+    "CLAUDE_HOOK_RAM_LIMIT_GB": "4",
+    "OTEL_SERVICE_NAME": "claude-code-mgtg",
+    "COVERAGE_BRANCH_TARGET_A": "95",
+    "COVERAGE_BRANCH_TARGET_C": "80",
+    "COVERAGE_GATE_SKIP_PATTERN": "backtest_engine\\.py$",
+    "MUTATION_SCORE_TARGET_A": "80",
+    "MUTATION_SCORE_TARGET_B": "70",
+    "FUZZ_DEFAULT_EXAMPLES": "100",
+    "MULTI_JUDGE_DEFAULT": "J1+J3",
+    "DEB_AUTO_BUNDLE": "1",
+    "CLAUDE_VERIFY_DAILY_BUDGET_USD": "5",
+    "CLAUDE_STOP_VERIFIER_ENABLED": "0",
+    "TRAJECTORY_RECORDER_ENABLED": "1",
+    "LLM_EVAL_AUTO_CI": "1",
+    "AUTO_MUTATION_ENABLED": "0",
+    "AUTO_APPLY_RATE_TARGET": "30",
+    "ASSET_BLOAT_WARN_THRESHOLD": "180",
+    "ASSET_BLOAT_CRITICAL_THRESHOLD": "200",
+    "DECISION_JOURNAL_TRADING_BLOCK": "1"
   },
   "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Edit(**/*)",
+      "Write(**/*)",
+      "Read(**/*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Agent(*)",
+      "PowerShell(*)"
+    ],
+    "deny": [],
     "defaultMode": "bypassPermissions"
   },
-  "model": "sonnet",
   "hooks": {
     "SessionStart": [
       {
@@ -37,6 +70,40 @@
             "command": "bash ~/.claude/hooks/stale-drawer-detector.sh",
             "statusMessage": "Stale drawer 검사 중...",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/trace-context-boot.sh",
+            "statusMessage": "OTel 컨텍스트 초기화 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/drift-baseline-loader.sh",
+            "statusMessage": "Drift baseline 로드 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/2604181800_daily-fit-check.sh",
+            "statusMessage": "Daily Fit Layer 1 체크 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/vibe-sunsang-autostart.sh",
+            "statusMessage": "바선생 대화 로그 변환 중..."
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/cleanup-old-plans.sh",
+            "statusMessage": "오래된 plan 아카이브 정리 중...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/2605011252_ritual-enforcer.sh",
+            "async": true
           }
         ]
       }
@@ -56,7 +123,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/oneshot-trigger.sh"
+            "command": "bash ~/.claude/hooks/2604191800_prompt-refiner.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/cynefin-router.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/devils-advocate-trigger.sh",
+            "async": true
           }
         ]
       }
@@ -83,6 +161,31 @@
             "type": "command",
             "command": "bash ~/.mempalace/hooks/mistake_detector_hook.sh",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/ux-rehearsal-suggest.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/harness-session-collector.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stop-verifier-subagent.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/trajectory-recorder.sh Stop",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/dora-metrics-collector.sh",
+            "async": true
           }
         ]
       }
@@ -93,6 +196,11 @@
           {
             "type": "command",
             "command": "bash ~/.mempalace/hooks/mempal_precompact_hook.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/precompact-decision-extractor.sh",
             "async": true
           }
         ]
@@ -106,36 +214,6 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/global-careful.sh",
             "statusMessage": "파괴적 명령 검사 중..."
-          }
-        ]
-      },
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/gate-guard.sh",
-            "statusMessage": "GateGuard 체크..."
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/edit-integrity-guard.sh",
-            "statusMessage": "Edit 무결성 검사 중..."
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/gate-guard.sh",
-            "statusMessage": "GateGuard 체크..."
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/edit-integrity-guard.sh",
-            "statusMessage": "Edit 무결성 검사 중..."
           }
         ]
       }
@@ -160,12 +238,84 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/lore-commit-suggest.sh",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/drift-sentinel.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/oasdiff-drift.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/pytestarch-guard.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/cpcv-check.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/2604181802_lesson-reinforcer.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/dependency-drift-monitor.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/verify-static.sh",
+            "statusMessage": "정적 검증 (py_compile)...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/verify-suggest.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/coverage-gate.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/trajectory-recorder.sh PostToolUse",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/anti-pattern-blocker.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/surprise-detector.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/risk-asset-router.sh",
+            "async": true
           }
         ]
       },
       {
         "matcher": "Edit",
         "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/typecheck.sh",
+            "statusMessage": "TypeScript 타입체크 중...",
+            "async": true
+          },
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/security-scan.sh",
@@ -176,6 +326,72 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/lore-commit-suggest.sh",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/drift-sentinel.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/oasdiff-drift.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/pytestarch-guard.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/cpcv-check.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/2604181802_lesson-reinforcer.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/dependency-drift-monitor.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/verify-static.sh",
+            "statusMessage": "정적 검증 (py_compile)...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/verify-suggest.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/coverage-gate.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/trajectory-recorder.sh PostToolUse",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/anti-pattern-blocker.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/surprise-detector.sh",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/risk-asset-router.sh",
+            "async": true
           }
         ]
       },
@@ -185,6 +401,16 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/read-hash-recorder.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/ci-failure-auto-triage.sh",
             "async": true
           }
         ]
@@ -200,7 +426,8 @@
     "ralph-loop@claude-plugins-official": true,
     "usage-gate@usage-gate": true,
     "codex@openai-codex": true,
-    "vibe-sunsang@fivetaku": true
+    "vibe-sunsang@fivetaku": true,
+    "frontend-design@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "careerhackeralex": {
@@ -249,6 +476,8 @@
   "autoUpdatesChannel": "latest",
   "channelsEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "enableRemoteControl": true,
   "channels": [

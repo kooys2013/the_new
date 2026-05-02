@@ -2,7 +2,7 @@
 ---
 description: Sonnet(실행) + Opus(자문)를 단일 /v1/messages 턴 안에서 결합하는 Advisor 패턴
 paths:
-  - "**/*"
+  - "__on_demand_only__"
 ---
 
 # Advisor Strategy (Sonnet + Opus 단일 턴)

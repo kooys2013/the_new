@@ -1,7 +1,11 @@
 ---
 description: 코드 리뷰 통과 기준 5축 — 검·읽·일·안·추 (TRUST 5 한국어 매핑) — autopus-adk 차용
 paths:
-  - "**/*"
+  - "**/*.py"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
 ---
 
 # 코드 리뷰 5축 (검·읽·일·안·추)
@@ -30,6 +34,7 @@ paths:
 일: 린트 에러 0 + 포맷 통과
 안: /cso WARN 이상 0건 + 시크릿 grep 0건
 추: 핵심 결정에 /lore-commit 또는 mempalace drawer 1건+
+추: 리뷰 코멘트마다 근거(rule 파일 / 테스트 / 외부 표준) 1건 이상 인용 — 인용 없으면 M5 위반
 ```
 
 **1축이라도 FAIL → 머지 금지**. user-eye E1(거짓완료)·H1(떠넘기기) 규칙과 직결.
@@ -69,7 +74,24 @@ paths:
 5축 FAIL은 harsh-critic.md의 다음 항목과 매핑:
 - 검 FAIL → E1(거짓완료) / E2(검증위장)
 - 안 FAIL → E4(누적교훈재발) (보안 누적 교훈 위반 시)
-- 추 FAIL → M3(형식적 사과 — 결정 영속성 없이 "다음에 조심")
+- 추 FAIL → M3(형식적 사과 — 결정 영속성 없이 "다음에 조심") + M5(근거 없는 취향 리뷰)
+
+## 리뷰 코멘트 표준 포맷
+<!-- origin: mafia-codereview-harness side-effect pattern | merged: 26/04/26 -->
+
+리뷰어(`/review`, `/codex:review`, plan-eng-review 등)는 각 코멘트를 6필드로 구조화:
+
+```
+- 위치: file.ts:42
+- 근거: rules/X.md L23 또는 OWASP A02
+- 내용: 무엇이 문제인가
+- 제안: 구체 수정안
+- side effect: 이 수정으로 발생하는 부작용/리스크
+- 제안 이유: side effect를 감수하고도 권하는 이유
+```
+
+`근거` / `side effect` / `제안 이유` 누락 시 → harsh-critic M5 트리거.
+trivial 1줄 수정(낮은 우선순위)은 `side effect` / `제안 이유` 면제 가능.
 
 ## 참조
 - `service-completion-checklist.md` — 5 SCP (실패 유형)

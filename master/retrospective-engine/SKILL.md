@@ -1,6 +1,8 @@
-<!-- last-updated: 26/04/17 -->
 ---
 name: retrospective-engine
+model: claude-sonnet-4-6
+effort: high
+last-updated: 26/04/17
 description: |
   (MASTER) 회고 엔진 — 반드시 사용: 회고, retro, KPT, AAR, 포스트모텀, postmortem, 스프린트 리뷰, 잘된점 못된점, PDCA 리뷰, 이번 주/달/프로젝트 돌아보기. For structured backward reflection on completed work. Do NOT use for forward planning.
 

@@ -2,7 +2,7 @@
 # Claude Code Slack 알림 스크립트
 # $1 = 이벤트 타입 (requesting-permission | completed)
 
-WEBHOOK_URL="${SLACK_WEBHOOK_URL:-}"
+WEBHOOK_URL="${SLACK_WEBHOOK_URL:-}"  # 환경변수로 주입: export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
 EVENT_TYPE="${1:-unknown}"
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 WORKING_DIR="${2:-$(pwd)}"
